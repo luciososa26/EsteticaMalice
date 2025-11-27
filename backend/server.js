@@ -4,20 +4,18 @@ require("dotenv").config();
 
 const db = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
+const serviciosRoutes = require("./routes/serviciosRoutes"); // 👈 NUEVO
 
 const app = express();
 const PORT = 3000;
 
-// Middlewares globales
 app.use(cors());
 app.use(express.json());
 
-// Ruta de prueba del servidor
 app.get("/", (req, res) => {
   res.send("MaliceEstetica API funcionando ✨");
 });
 
-// Ruta de prueba de DB
 app.get("/db-test", async (req, res) => {
   try {
     const [rows] = await db.query("SELECT 1 + 1 AS resultado");
@@ -36,8 +34,11 @@ app.get("/db-test", async (req, res) => {
   }
 });
 
-// Usamos las rutas de autenticación bajo /api/auth
+// Rutas de autenticación
 app.use("/api/auth", authRoutes);
+
+// Rutas de servicios
+app.use("/api/servicios", serviciosRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
