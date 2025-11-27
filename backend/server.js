@@ -1,32 +1,30 @@
 const express = require("express");
 const cors = require("cors");
+require("dotenv").config();
 
-// Importamos la conexión a la base de datos
 const db = require("./config/db");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 const PORT = 3000;
 
-// Middlewares básicos
+// Middlewares globales
 app.use(cors());
 app.use(express.json());
 
-// Ruta de prueba simple para ver si el servidor responde
+// Ruta de prueba del servidor
 app.get("/", (req, res) => {
   res.send("MaliceEstetica API funcionando ✨");
 });
 
-// Ruta de prueba para ver si la base de datos responde
+// Ruta de prueba de DB
 app.get("/db-test", async (req, res) => {
   try {
-    // Hacemos una consulta muy simple: 1 + 1
     const [rows] = await db.query("SELECT 1 + 1 AS resultado");
-
-    // Devolvemos el resultado en formato JSON
     res.json({
       ok: true,
       mensaje: "Conexión a la base de datos OK ✅",
-      resultado: rows[0].resultado, // debería ser 2
+      resultado: rows[0].resultado,
     });
   } catch (error) {
     console.error("Error al conectar con la base de datos:", error);
@@ -37,6 +35,9 @@ app.get("/db-test", async (req, res) => {
     });
   }
 });
+
+// Usamos las rutas de autenticación bajo /api/auth
+app.use("/api/auth", authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
