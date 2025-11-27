@@ -1,0 +1,23 @@
+<div class="inicio-wrapper">
+  <div class="inicio-card" *ngIf="usuario; else sinUsuario">
+    <h1>Hola, {{ usuario.nombre_apellido }} 👋</h1>
+    <p>Bienvenido/a a MaliceEstetica.</p>
+
+    <div class="info">
+      <p><strong>Email:</strong> {{ usuario.email }}</p>
+      <p><strong>Teléfono:</strong> {{ usuario.telefono || 'No cargado' }}</p>
+      <p><strong>Rol:</strong> {{ usuario.rol }}</p>
+    </div>
+  </div>
+
+  <ng-template #sinUsuario>
+    <h2>No hay usuario logueado.</h2>
+    <p>
+      <a routerLink="/login">Iniciar sesión</a> o
+      <a routerLink="/register">crear una cuenta</a>
+    </p>
+  </ng-template>
+
+  <p *ngIf="cargando">Cargando datos...</p>
+  <p *ngIf="errorMsg" class="error">{{ errorMsg }}</p>
+</div>

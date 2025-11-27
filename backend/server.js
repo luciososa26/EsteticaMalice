@@ -4,7 +4,10 @@ require("dotenv").config();
 
 const db = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
-const serviciosRoutes = require("./routes/serviciosRoutes"); // 👈 NUEVO
+const serviciosRoutes = require("./routes/serviciosRoutes"); 
+const profesionalesRoutes = require("./routes/profesionalesRoutes");
+const turnosRoutes = require("./routes/turnosRoutes");
+
 
 const app = express();
 const PORT = 3000;
@@ -39,6 +42,12 @@ app.use("/api/auth", authRoutes);
 
 // Rutas de servicios
 app.use("/api/servicios", serviciosRoutes);
+
+// Rutas de profesionales
+app.use("/api/profesionales", profesionalesRoutes);
+
+// Rutas de turnos
+app.use("/api/turnos", turnosRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
