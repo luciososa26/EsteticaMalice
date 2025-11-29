@@ -53,19 +53,30 @@ export class AuthService {
   // ===========================
   // Manejo simple de token en localStorage
   // ===========================
+private isBrowser(): boolean {
+  return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+}
+
   guardarToken(token: string) {
-    localStorage.setItem('token', token);
+    if (this.isBrowser()) {
+      localStorage.setItem('token', token);
+    }
   }
 
   obtenerToken(): string | null {
-    return localStorage.getItem('token');
+    if (this.isBrowser()) {
+      return localStorage.getItem('token');
+    }
+    return null;
   }
 
   borrarToken() {
-    localStorage.removeItem('token');
+    if (this.isBrowser()) {
+      localStorage.removeItem('token');
+    }
   }
 
   estaLogueado(): boolean {
-    return !!this.obtenerToken();
+    return this.isBrowser() && !!this.obtenerToken();
   }
 }

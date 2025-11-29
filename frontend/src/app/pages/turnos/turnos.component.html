@@ -1,0 +1,187 @@
+<div class="turnos-wrapper">
+  <div class="turnos-card">
+
+    <!-- PASOS -->
+    <div class="stepper">
+      <div class="step" [class.step--active]="pasoActual === 1">
+        <span>1</span>
+        <p>Fecha y hora</p>
+      </div>
+
+      <div class="step" [class.step--active]="pasoActual === 2">
+        <span>2</span>
+        <p>Profesional / servicio</p>
+      </div>
+    </div>
+
+    <!-- ========================= -->
+    <!--  PASO 1: FECHA + HORARIO  -->
+    <!-- ========================= -->
+    <div *ngIf="pasoActual === 1">
+      <h2>Seleccioná fecha y hora de tu servicio</h2>
+
+      <!-- TIRA DE DÍAS -->
+      <div class="days-strip">
+        <button
+          *ngFor="let d of diasDisponibles"
+          type="button"
+          class="day-pill"
+          [class.day-pill--selected]="diaSeleccionado === d"
+          (click)="seleccionarDia(d)"
+        >
+          <span class="day-pill__dia">{{ d.etiquetaDia }}</span>
+          <span class="day-pill__num">{{ d.etiquetaNum }}</span>
+        </button>
+      </div>
+
+      <!-- MENSAJE: NO HAY HORARIOS DISPONIBLES -->
+      <div
+        *ngIf="noHayHorariosDisponibles"
+        class="estado-sin-horarios"
+      >
+        No hay horarios disponibles para este día.
+      </div>
+
+      <!-- SESIÓN MAÑANA -->
+      <div
+        class="slots-section"
+        *ngIf="horariosMananaDisponibles.length > 0"
+      >
+        <h3>Mañana</h3>
+        <div class="slots-row">
+          <button
+            type="button"
+            class="slot-btn"
+            *ngFor="let h of horariosMananaDisponibles"
+            [class.slot-btn--selected]="horaSeleccionada === h"
+            (click)="seleccionarHora(h)"
+          >
+            {{ h }} hs
+          </button>
+        </div>
+      </div>
+
+      <!-- SESIÓN TARDE -->
+      <div
+        class="slots-section"
+        *ngIf="horariosTardeDisponibles.length > 0"
+      >
+        <h3>Tarde</h3>
+        <div class="slots-row">
+          <button
+            type="button"
+            class="slot-btn"
+            *ngFor="let h of horariosTardeDisponibles"
+            [class.slot-btn--selected]="horaSeleccionada === h"
+            (click)="seleccionarHora(h)"
+          >
+            {{ h }} hs
+          </button>
+        </div>
+      </div>
+
+      <p class="error" *ngIf="errorMsg && !idUsuario">
+        {{ errorMsg }}
+      </p>
+
+      <button
+        class="btn-primary"
+        type="button"
+        (click)="irAlPaso2()"
+        [disabled]="noHayHorariosDisponibles"
+      >
+        Continuar
+      </button>
+    </div>
+
+    <!-- ========================= -->
+    <!--   PASO 2: SERVICIO + PROF -->
+    <!-- ========================= -->
+    <form
+      *ngIf="pasoActual === 2"
+      [formGroup]="turnoForm"
+      (ngSubmit)="onSubmit()"
+      class="form-turno"
+    >
+      <h2>Elegí servicio y profesional</h2>
+
+      <div class="form-group">
+        <label for="servicio">Servicio</label>
+        <select id="servicio" formControlName="id_servicio">
+          <option value="" disabled selected>Elegí un servicio</option>
+          <option *ngFor="let s of servicios" [value]="s.id">
+            {{ s.nombre }} — ${{ s.precio }}
+          </option>
+        </select>
+
+        <small *ngIf="campoInvalido('id_servicio')" class="error">
+          Tenés que elegir un servicio.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="profesional">Profesional</label>
+        <select id="profesional" formControlName="id_profesional">
+          <option value="" disabled selected>Elegí un profesional</option>
+          <option *ngFor="let p of profesionales" [value]="p.id">
+            {{ p.nombre_apellido }}
+            <span *ngIf="p.especialidad"> — {{ p.especialidad }}</span>
+          </option>
+        </select>
+
+        <small *ngIf="campoInvalido('id_profesional')" class="error">
+          Tenés que elegir un profesional.
+        </small>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="volverAlPaso1()">
+          Volver
+        </button>
+
+        <button type="submit" class="btn-primary" [disabled]="creandoTurno">
+          {{ creandoTurno ? 'Creando turno...' : 'Confirmar turno' }}
+        </button>
+      </div>
+
+      <p *ngIf="mensajeOk" class="ok">{{ mensajeOk }}</p>
+      <p *ngIf="errorMsg && idUsuario" class="error">{{ errorMsg }}</p>
+    </form>
+  </div>
+
+  <!-- ========================= -->
+  <!--      MIS TURNOS           -->
+  <!-- ========================= -->
+  <div class="turnos-lista">
+    <h2>Mis turnos</h2>
+
+    <p *ngIf="cargandoTurnosUsuario">Cargando tus turnos...</p>
+
+    <p *ngIf="!cargandoTurnosUsuario && turnosUsuario.length === 0">
+      Todavía no tenés turnos reservados.
+    </p>
+
+    <ul *ngIf="turnosUsuario.length > 0">
+      <li *ngFor="let t of turnosUsuario">
+        <div class="turno-item">
+          <div class="turno-info">
+            <strong>{{ t.servicio }}</strong>
+            con {{ t.profesional }}
+            — {{ t.fecha }} a las {{ t.hora }}
+            — <span class="estado estado-{{ t.estado }}">{{ t.estado }}</span>
+          </div>
+
+          <button
+            type="button"
+            class="btn-cancelar"
+            *ngIf="t.estado === 'pendiente'"
+            (click)="cancelarTurno(t)"
+            [disabled]="cancelandoId === t.id"
+          >
+            {{ cancelandoId === t.id ? 'Cancelando...' : 'Cancelar' }}
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

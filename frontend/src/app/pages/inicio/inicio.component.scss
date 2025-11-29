@@ -30,3 +30,23 @@
     color: #c0392b;
   }
 }
+
+.link-servicios {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #d7a887;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.15s ease, transform 0.1s ease,
+    box-shadow 0.1s ease;
+
+  &:hover {
+    background: #c28c68;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.16);
+  }
+}

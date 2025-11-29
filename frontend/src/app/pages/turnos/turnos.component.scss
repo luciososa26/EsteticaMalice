@@ -1,0 +1,360 @@
+/* ========================= */
+/*   LAYOUT GENERAL          */
+/* ========================= */
+.turnos-wrapper {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #f8f3f0;
+  display: grid;
+  grid-template-columns: minmax(320px, 520px) minmax(320px, 1fr);
+  gap: 24px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.turnos-card,
+.turnos-lista {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 20px 22px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+}
+
+/* ========================= */
+/*   STEPPER                 */
+/* ========================= */
+.stepper {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.5;
+  font-size: 14px;
+
+  span {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #d7a887;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+  }
+
+  &--active {
+    opacity: 1;
+
+    span {
+      background: #d7a887;
+      color: #fff;
+    }
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+/* ========================= */
+/*   DÍAS DISPONIBLES        */
+/* ========================= */
+.days-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 0 4px;
+  margin-bottom: 16px;
+
+  /* Remover scroll feo en Chrome */
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 4px;
+  }
+}
+
+.day-pill {
+  min-width: 58px;
+  border-radius: 14px;
+  border: 1px solid #ccc;
+  background: #fff;
+  padding: 6px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+    transform 0.1s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &__dia {
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+
+  &__num {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  &--selected {
+    background: #1e88e5;
+    border-color: #1e88e5;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(30, 136, 229, 0.3);
+  }
+}
+
+/* ========================= */
+/*      HORARIOS             */
+/* ========================= */
+.slots-section {
+  margin-top: 12px;
+
+  h3 {
+    margin: 10px 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+}
+
+.slots-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.slot-btn {
+  border-radius: 999px;
+  border: 1px solid #1e88e5;
+  background: #fff;
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease,
+    transform 0.1s ease;
+
+  &:hover {
+    background: #e3f0ff;
+  }
+
+  &--selected {
+    background: #1e88e5;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(30, 136, 229, 0.3);
+    transform: translateY(-2px);
+  }
+}
+
+/* Mensaje cuando no hay horarios */
+.estado-sin-horarios {
+  background: #fff3cd;
+  color: #7a5f1b;
+  border: 1px solid #ffeeba;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+/* ========================= */
+/*     BOTONES GENERALES     */
+/* ========================= */
+.btn-primary,
+.btn-secondary {
+  border-radius: 999px;
+  padding: 10px 20px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #d7a887;
+  color: #fff;
+  transition: background 0.15s ease, transform 0.1s ease,
+    box-shadow 0.1s ease;
+
+  &:hover:not([disabled]) {
+    background: #c28c68;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.16);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+    box-shadow: none;
+  }
+}
+
+.btn-secondary {
+  background: #eee;
+  color: #333;
+
+  &:hover {
+    background: #ddd;
+  }
+}
+
+/* ========================= */
+/*     FORMULARIO PASO 2     */
+/* ========================= */
+.form-turno {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  select {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background: #fff;
+
+    &:focus {
+      outline: none;
+      border-color: #d7a887;
+      box-shadow: 0 0 0 2px rgba(215, 168, 135, 0.3);
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.error {
+  font-size: 13px;
+  color: #c0392b;
+}
+
+.ok {
+  font-size: 13px;
+  color: #2e7d32;
+}
+
+/* ========================= */
+/*     LISTA DE TURNOS       */
+/* ========================= */
+.turnos-lista ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 12px;
+}
+
+.turnos-lista li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.estado {
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.estado-pendiente {
+  color: #d68910;
+}
+
+.estado-confirmado {
+  color: #2e7d32;
+}
+
+.estado-cancelado {
+  color: #c0392b;
+}
+
+.turnos-lista ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 12px;
+}
+
+.turnos-lista li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.turno-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.turno-info {
+  flex: 1;
+}
+
+.btn-cancelar {
+  border-radius: 999px;
+  padding: 6px 14px;
+  border: 1px solid #c0392b;
+  background: #fff;
+  color: #c0392b;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease,
+    transform 0.1s ease;
+
+  &:hover:not([disabled]) {
+    background: #c0392b;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(192, 57, 43, 0.3);
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+.slot-btn[disabled] {
+  border-color: #ccc;
+  color: #aaa;
+  background: #f2f2f2;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}

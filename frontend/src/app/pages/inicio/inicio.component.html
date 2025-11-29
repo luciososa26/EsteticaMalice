@@ -8,6 +8,15 @@
       <p><strong>Teléfono:</strong> {{ usuario.telefono || 'No cargado' }}</p>
       <p><strong>Rol:</strong> {{ usuario.rol }}</p>
     </div>
+
+    <a routerLink="/servicios" class="link-servicios">
+      Ver servicios disponibles
+    </a>
+
+    <a routerLink="/turnos" class="link-servicios">
+      Sacar un turno
+    </a>
+
   </div>
 
   <ng-template #sinUsuario>

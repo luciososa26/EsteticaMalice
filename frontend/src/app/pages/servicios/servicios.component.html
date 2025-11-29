@@ -1,0 +1,37 @@
+<div class="servicios-wrapper">
+  <div class="servicios-header">
+    <h1>Servicios</h1>
+    <p>Elegí el servicio que más se ajuste a lo que estás buscando.</p>
+  </div>
+
+  <p *ngIf="cargando" class="estado">Cargando servicios...</p>
+  <p *ngIf="errorMsg" class="estado error">{{ errorMsg }}</p>
+
+  <div class="grid" *ngIf="!cargando && servicios.length > 0">
+    <article class="card" *ngFor="let servicio of servicios">
+      <h2>{{ servicio.nombre }}</h2>
+
+      <p class="descripcion" *ngIf="servicio.descripcion; else sinDesc">
+        {{ servicio.descripcion }}
+      </p>
+      <ng-template #sinDesc>
+        <p class="descripcion descripcion--vacía">
+          Este servicio todavía no tiene descripción detallada.
+        </p>
+      </ng-template>
+
+      <div class="meta">
+        <span class="duracion">
+          ⏱️ {{ servicio.duracion_minutos }} min
+        </span>
+        <span class="precio">
+          $ {{ servicio.precio | number : '1.0-0' }}
+        </span>
+      </div>
+    </article>
+  </div>
+
+  <p *ngIf="!cargando && servicios.length === 0 && !errorMsg" class="estado">
+    No hay servicios disponibles por el momento.
+  </p>
+</div>

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';      // 👈 IMPORTANTE
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],            // 👈 AGREGAR RouterModule
   templateUrl: './inicio.component.html',
   styleUrls: ['./inicio.component.scss'],
 })

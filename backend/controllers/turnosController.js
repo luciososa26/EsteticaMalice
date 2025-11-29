@@ -17,16 +17,17 @@ exports.crearTurno = async (req, res) => {
       });
     }
 
-    // 1. Verificamos si el profesional ya tiene un turno en esa fecha y hora
+    // 1. Verificamos si YA existe un turno en esa fecha y hora (cualquier cliente / profesional)
     const [turnosExistentes] = await db.query(
       `SELECT id 
-       FROM turnos 
-       WHERE id_profesional = ? 
-         AND fecha = ? 
-         AND hora = ? 
-         AND estado IN ('pendiente', 'confirmado')`,
-      [id_profesional, fecha, hora]
+      FROM turnos 
+      WHERE fecha = ? 
+        AND hora = ? 
+        AND estado IN ('pendiente', 'confirmado')`,
+      [fecha, hora]
     );
+
+
 
     if (turnosExistentes.length > 0) {
       return res.status(409).json({
@@ -176,3 +177,47 @@ exports.cancelarTurno = async (req, res) => {
     });
   }
 };
+
+// ===============================
+// Obtener turnos ocupados por fecha (cualquier cliente)
+// GET /api/turnos/fecha/:fecha   (fecha = "YYYY-MM-DD")
+// ===============================
+exports.obtenerTurnosPorFecha = async (req, res) => {
+  try {
+    const { fecha } = req.params;
+
+    const [rows] = await db.query(
+      `
+      SELECT 
+        t.id,
+        u.nombre_apellido AS usuario,
+        p.nombre_apellido AS profesional,
+        s.nombre AS servicio,
+        t.fecha,
+        t.hora,
+        t.estado
+      FROM turnos t
+      JOIN usuarios u ON t.id_usuario = u.id
+      JOIN profesionales p ON t.id_profesional = p.id
+      JOIN servicios s ON t.id_servicio = s.id
+      WHERE t.fecha = ?
+        AND t.estado IN ('pendiente', 'confirmado')
+      ORDER BY t.hora ASC
+      `,
+      [fecha]
+    );
+
+    res.json({
+      ok: true,
+      turnos: rows,
+    });
+  } catch (error) {
+    console.error('Error al obtener turnos por fecha:', error);
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al obtener los turnos de ese día',
+      error: error.message,
+    });
+  }
+};
+
