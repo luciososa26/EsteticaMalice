@@ -7,6 +7,7 @@ const authRoutes = require("./routes/authRoutes");
 const serviciosRoutes = require("./routes/serviciosRoutes"); 
 const profesionalesRoutes = require("./routes/profesionalesRoutes");
 const turnosRoutes = require("./routes/turnosRoutes");
+const consultasRoutes = require("./routes/consultasRoutes");
 
 
 const app = express();
@@ -48,6 +49,8 @@ app.use("/api/profesionales", profesionalesRoutes);
 
 // Rutas de turnos
 app.use("/api/turnos", turnosRoutes);
+
+app.use("/api/consultas", consultasRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);

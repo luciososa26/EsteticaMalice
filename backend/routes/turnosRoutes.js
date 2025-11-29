@@ -21,10 +21,8 @@ router.get("/", /* verifyToken, */ obtenerTurnos);
 // Turnos de un usuario específico
 router.get("/usuario/:idUsuario", /* verifyToken, */ obtenerTurnosPorUsuario);
 
-
 // Turnos ocupados por fecha (cualquier cliente)
 router.get("/fecha/:fecha", /* verifyToken, */ obtenerTurnosPorFecha);
-
 
 // Cancelar turno
 router.put("/:id/cancelar", /* verifyToken, */ cancelarTurno);
