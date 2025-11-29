@@ -12,18 +12,17 @@ interface AuthResponse {
 }
 
 @Injectable({
-  providedIn: 'root', // Disponible en toda la app
+  providedIn: 'root',
 })
 export class AuthService {
-  // Tomamos la URL base de la API desde environment
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
-  // ===========================
-  // Registro de usuario
-  // Llama a POST /api/auth/register
-  // ===========================
+  // ====================================
+  //  REGISTRO
+  //  POST /api/auth/register
+  // ====================================
   register(data: {
     nombre_apellido: string;
     email: string;
@@ -33,31 +32,30 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, data);
   }
 
-  // ===========================
-  // Login de usuario
-  // Llama a POST /api/auth/login
-  // ===========================
+  // ====================================
+  //  LOGIN
+  //  POST /api/auth/login
+  // ====================================
   login(data: { email: string; password: string }): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, data);
   }
 
-  // ===========================
-  // Obtener usuario logueado (ME)
-  // GET /api/auth/me
-  // Requiere enviar el token en el header (lo veremos después con interceptor)
-  // ===========================
+  // ====================================
+  //  ME — Obtener usuario logueado
+  //  GET /api/auth/me
+  // ====================================
   me(): Observable<AuthResponse> {
     return this.http.get<AuthResponse>(`${this.apiUrl}/auth/me`);
   }
 
-  // ===========================
-  // Manejo simple de token en localStorage
-  // ===========================
-private isBrowser(): boolean {
-  return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
-}
+  // ====================================
+  //  LOCAL STORAGE SAFE ACCESS
+  // ====================================
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  }
 
-  guardarToken(token: string) {
+  guardarToken(token: string): void {
     if (this.isBrowser()) {
       localStorage.setItem('token', token);
     }
@@ -70,13 +68,23 @@ private isBrowser(): boolean {
     return null;
   }
 
-  borrarToken() {
+  borrarToken(): void {
     if (this.isBrowser()) {
       localStorage.removeItem('token');
     }
   }
 
+  // ====================================
+  //  LOGOUT
+  // ====================================
+  logout(): void {
+    this.borrarToken();
+  }
+
+  // ====================================
+  //  ESTADO
+  // ====================================
   estaLogueado(): boolean {
-    return this.isBrowser() && !!this.obtenerToken();
+    return !!this.obtenerToken();
   }
 }

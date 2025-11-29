@@ -1,0 +1,37 @@
+<header class="header">
+
+  <div class="header__logo">
+    <a routerLink="/">Malice Estética</a>
+  </div>
+
+  <!-- Botón hamburguesa -->
+  <button class="header__toggle" (click)="toggleMenu()">
+    ☰
+  </button>
+
+  <!-- NAV -->
+  <nav class="header__nav" [class.header__nav--open]="menuAbierto">
+
+    <a routerLink="/" routerLinkActive="active" (click)="toggleMenu()">Inicio</a>
+
+    <a routerLink="/servicios" routerLinkActive="active" (click)="toggleMenu()">Servicios</a>
+
+    <a routerLink="/turnos" routerLinkActive="active" (click)="toggleMenu()">Turnos</a>
+
+    <a routerLink="/contacto" routerLinkActive="active" (click)="toggleMenu()">Contacto</a>
+
+    <!-- SI está logueado -->
+    <ng-container *ngIf="authService.estaLogueado(); else noLogueado">
+      <a routerLink="/mi-cuenta" routerLinkActive="active" (click)="toggleMenu()">Mi cuenta</a>
+
+      <button class="btn-logout" (click)="cerrarSesion()">Cerrar sesión</button>
+    </ng-container>
+
+    <!-- SI NO está logueado -->
+    <ng-template #noLogueado>
+      <a routerLink="/login" routerLinkActive="active" (click)="toggleMenu()">Ingresar</a>
+      <a routerLink="/register" routerLinkActive="active" (click)="toggleMenu()">Registrarme</a>
+    </ng-template>
+  </nav>
+
+</header>

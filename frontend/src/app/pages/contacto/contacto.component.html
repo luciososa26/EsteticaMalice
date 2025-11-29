@@ -1,0 +1,75 @@
+<div class="contacto-wrapper">
+  <div class="contacto-card">
+    <h2>Contacto</h2>
+    <p class="intro">
+      ¿Tenés una consulta, duda o querés coordinar algo especial?
+      Completá el formulario y te respondemos a la brevedad.
+    </p>
+
+    <form [formGroup]="contactoForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="nombre">Nombre y apellido</label>
+        <input
+          id="nombre"
+          type="text"
+          formControlName="nombre_apellido"
+          placeholder="Ej: Ana López"
+        />
+        <small *ngIf="campoInvalido('nombre_apellido')" class="error">
+          Ingresá tu nombre y apellido (mínimo 3 caracteres).
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Ej: nombre@correo.com"
+        />
+        <small *ngIf="campoInvalido('email')" class="error">
+          Ingresá un email válido.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="tel">Teléfono (opcional)</label>
+        <input
+          id="tel"
+          type="text"
+          formControlName="telefono"
+          placeholder="Ej: 3462 123456"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="mensaje">Mensaje</label>
+        <textarea
+          id="mensaje"
+          rows="4"
+          formControlName="mensaje"
+          placeholder="Contanos en qué podemos ayudarte..."
+        ></textarea>
+        <small *ngIf="campoInvalido('mensaje')" class="error">
+          Escribí un mensaje (mínimo 10 caracteres).
+        </small>
+      </div>
+
+      <button class="btn-primary" type="submit" [disabled]="enviando">
+        {{ enviando ? 'Enviando...' : 'Enviar consulta' }}
+      </button>
+
+      <p *ngIf="mensajeOk" class="ok">{{ mensajeOk }}</p>
+      <p *ngIf="errorMsg" class="error">{{ errorMsg }}</p>
+    </form>
+  </div>
+
+  <div class="contacto-info">
+    <h3>Datos de la estética</h3>
+    <p>Horario: Lunes a Viernes de 8 a 19 hs. Sábados de 8 a 13 hs.</p>
+    <p>Dirección: (acá podés poner la dirección real)</p>
+    <p>WhatsApp: (tu número)</p>
+    <p>Instagram: malice.estetica (o el que tengas)</p>
+  </div>
+</div>
