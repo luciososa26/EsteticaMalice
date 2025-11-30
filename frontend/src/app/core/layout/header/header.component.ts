@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth.service'; // 👈 ojo la ruta
 
 @Component({
   selector: 'app-header',
@@ -13,14 +13,23 @@ import { AuthService } from '../../services/auth.service';
 export class HeaderComponent {
   menuAbierto = false;
 
-  constructor(public authService: AuthService, private router: Router) {}
+  constructor(
+    private router: Router,
+    public authService: AuthService
+  ) {}
 
   toggleMenu() {
     this.menuAbierto = !this.menuAbierto;
   }
 
+  irAInicio() {
+    this.menuAbierto = false;
+    this.router.navigate(['/']);
+  }
+
   cerrarSesion() {
-    this.authService.logout();
+    this.authService.logout();      // usa tu logout del AuthService
+    this.menuAbierto = false;
     this.router.navigate(['/login']);
   }
 }

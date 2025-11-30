@@ -1,0 +1,65 @@
+<div class="mi-cuenta-wrapper">
+
+  <!-- INFO USUARIO -->
+  <section class="mi-cuenta-panel">
+    <h1>Mi cuenta</h1>
+
+    <p *ngIf="cargandoUsuario">Cargando tus datos...</p>
+
+    <ng-container *ngIf="!cargandoUsuario && usuario">
+      <div class="info-box">
+        <h2>Datos personales</h2>
+        <p><strong>Nombre:</strong> {{ usuario.nombre_apellido }}</p>
+        <p><strong>Email:</strong> {{ usuario.email }}</p>
+        <p *ngIf="usuario.telefono">
+          <strong>Teléfono:</strong> {{ usuario.telefono }}
+        </p>
+        <p *ngIf="usuario.rol">
+          <strong>Rol:</strong> {{ usuario.rol }}
+        </p>
+      </div>
+    </ng-container>
+
+    <p class="error" *ngIf="errorMsg && !usuario">
+      {{ errorMsg }}
+    </p>
+  </section>
+
+  <!-- MIS TURNOS -->
+  <section class="mi-cuenta-turnos">
+    <h2>Mis turnos</h2>
+
+    <p *ngIf="cargandoTurnos">Cargando tus turnos...</p>
+
+    <p *ngIf="!cargandoTurnos && turnos.length === 0">
+      Todavía no tenés turnos reservados.
+    </p>
+
+    <ul *ngIf="turnos.length > 0" class="turnos-lista">
+      <li *ngFor="let t of turnos" class="turno-item">
+        <div class="turno-info">
+          <strong>{{ t.servicio }}</strong>
+          <span>con {{ t.profesional }}</span>
+          <span> — {{ t.fecha }} a las {{ t.hora }}</span>
+          <span class="estado estado-{{ t.estado }}">
+            {{ t.estado }}
+          </span>
+        </div>
+
+        <button
+          type="button"
+          class="btn-cancelar"
+          *ngIf="t.estado === 'pendiente'"
+          (click)="cancelarTurno(t)"
+          [disabled]="cancelandoId === t.id"
+        >
+          {{ cancelandoId === t.id ? 'Cancelando...' : 'Cancelar' }}
+        </button>
+      </li>
+    </ul>
+
+    <p class="ok" *ngIf="mensajeOk">{{ mensajeOk }}</p>
+    <p class="error" *ngIf="errorMsg && usuario">{{ errorMsg }}</p>
+  </section>
+
+</div>

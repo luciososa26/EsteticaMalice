@@ -1,0 +1,76 @@
+.mi-cuenta-wrapper {
+  padding: 32px 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(320px, 2fr);
+  gap: 24px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mi-cuenta-panel,
+.mi-cuenta-turnos {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.info-box {
+  margin-top: 8px;
+
+  p {
+    margin: 4px 0;
+  }
+}
+
+.turnos-lista {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.turno-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #f7f7f7;
+}
+
+.turno-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  font-size: 14px;
+}
+
+.btn-cancelar {
+  border: none;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  background: #f3d1d1;
+  color: #7b1f1f;
+}
+
+.error {
+  color: #c0392b;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.ok {
+  color: #2e7d32;
+  font-size: 13px;
+  margin-top: 8px;
+}
