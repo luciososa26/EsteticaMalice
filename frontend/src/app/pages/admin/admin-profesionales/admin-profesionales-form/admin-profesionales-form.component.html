@@ -1,0 +1,35 @@
+<div class="form-wrapper">
+  <h1>{{ titulo }}</h1>
+
+  <form [formGroup]="form" (ngSubmit)="guardar()">
+    <div class="form-group">
+      <label>Nombre y apellido</label>
+      <input formControlName="nombre_apellido" type="text" />
+    </div>
+
+    <div class="form-group">
+      <label>Especialidad</label>
+      <input formControlName="especialidad" type="text" />
+    </div>
+
+    <div class="form-group">
+      <label>Teléfono</label>
+      <input formControlName="telefono" type="text" />
+    </div>
+
+    <div class="form-group">
+      <label>Estado</label>
+      <select formControlName="estado">
+        <option value="activo">Activo</option>
+        <option value="inactivo">Inactivo</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn-guardar">
+      {{ editId ? 'Actualizar' : 'Crear profesional' }}
+    </button>
+
+    <p class="ok" *ngIf="mensajeOk">{{ mensajeOk }}</p>
+    <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+  </form>
+</div>

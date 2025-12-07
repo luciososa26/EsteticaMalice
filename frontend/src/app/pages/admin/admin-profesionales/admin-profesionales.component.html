@@ -1,0 +1,65 @@
+<div class="admin-profesionales-wrapper">
+  <div class="admin-profesionales-header">
+    <div>
+      <h1>Gestor de profesionales</h1>
+      <p>Desde acá podés crear, editar y administrar los profesionales.</p>
+    </div>
+
+    <button class="btn-primary" type="button" (click)="irANuevo()">
+      + Nuevo profesional
+    </button>
+  </div>
+
+  <p *ngIf="cargando" class="estado">Cargando profesionales...</p>
+  <p *ngIf="errorMsg" class="estado estado--error">{{ errorMsg }}</p>
+  <p *ngIf="mensajeOk" class="estado estado--ok">{{ mensajeOk }}</p>
+
+  <div
+    class="tabla-wrapper"
+    *ngIf="!cargando && profesionales.length > 0 && !errorMsg"
+  >
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Nombre y apellido</th>
+          <th>Especialidad</th>
+          <th>Teléfono</th>
+          <th>Estado</th>
+          <th class="col-acciones">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of profesionales">
+          <td>{{ p.nombre_apellido }}</td>
+          <td>{{ p.especialidad || '—' }}</td>
+          <td>{{ p.telefono || '—' }}</td>
+          <td>
+            <span
+              class="badge"
+              [class.badge--activo]="p.estado === 'activo'"
+              [class.badge--inactivo]="p.estado === 'inactivo'"
+            >
+              {{ p.estado }}
+            </span>
+          </td>
+          <td class="col-acciones">
+            <button
+              type="button"
+              class="btn-link"
+              (click)="irAEditar(p)"
+            >
+              Editar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p
+    *ngIf="!cargando && profesionales.length === 0 && !errorMsg"
+    class="estado"
+  >
+    Todavía no hay profesionales cargados.
+  </p>
+</div>

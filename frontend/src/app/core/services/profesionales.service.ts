@@ -6,10 +6,9 @@ import { Observable } from 'rxjs';
 export interface Profesional {
   id: number;
   nombre_apellido: string;
-  especialidad: string | null;
-  telefono: string | null;
-  estado: string;
-  creado_en: string;
+  especialidad?: string;
+  telefono?: string;
+  estado: 'activo' | 'inactivo';
 }
 
 interface ProfesionalesResponse {
@@ -18,15 +17,46 @@ interface ProfesionalesResponse {
   mensaje?: string;
 }
 
+interface ProfesionalResponse {
+  ok: boolean;
+  profesional?: Profesional;
+  mensaje?: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class ProfesionalesService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = `${environment.apiUrl}/profesionales`;
 
   constructor(private http: HttpClient) {}
 
   obtenerProfesionales(): Observable<ProfesionalesResponse> {
-    return this.http.get<ProfesionalesResponse>(`${this.apiUrl}/profesionales`);
+    return this.http.get<ProfesionalesResponse>(this.apiUrl);
+  }
+
+  obtenerProfesionalPorId(id: number): Observable<ProfesionalResponse> {
+    return this.http.get<ProfesionalResponse>(`${this.apiUrl}/${id}`);
+  }
+
+  crearProfesional(data: {
+    nombre_apellido: string;
+    especialidad?: string;
+    telefono?: string;
+    estado: 'activo' | 'inactivo';
+  }): Observable<ProfesionalResponse> {
+    return this.http.post<ProfesionalResponse>(this.apiUrl, data);
+  }
+
+  actualizarProfesional(
+    id: number,
+    data: {
+      nombre_apellido: string;
+      especialidad?: string;
+      telefono?: string;
+      estado: 'activo' | 'inactivo';
+    }
+  ): Observable<ProfesionalResponse> {
+    return this.http.put<ProfesionalResponse>(`${this.apiUrl}/${id}`, data);
   }
 }

@@ -13,6 +13,8 @@ import { MiCuentaComponent } from './pages/mi-cuenta/mi-cuenta.component';
 
 import { PanelAdminComponent } from './pages/admin/panel-admin/panel-admin.component';
 import { AdminServiciosComponent } from './pages/admin/admin-servicios/admin-servicios.component';
+import { AdminProfesionalesComponent } from './pages/admin/admin-profesionales/admin-profesionales.component';
+import { AdminProfesionalFormComponent } from './pages/admin/admin-profesionales/admin-profesionales-form/admin-profesionales-form.component';
 
 export const routes: Routes = [
 
@@ -49,6 +51,19 @@ export const routes: Routes = [
     path:'admin/servicios',
     component:AdminServiciosComponent,
     canActivate: [authGuard]
+  },
+  {
+    path:'admin/profesionales',
+    component:AdminProfesionalesComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path:'admin/profesionales/nuevo',
+    component:AdminProfesionalFormComponent,
+  },
+  {
+    path:'admin/profesionales/editar/:id',
+    component:AdminProfesionalFormComponent,
   },
 
   // ============================
