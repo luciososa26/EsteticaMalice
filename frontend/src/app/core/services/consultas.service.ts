@@ -3,14 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
-export interface CrearConsultaBody {
-  nombre_apellido: string;
-  email: string;
-  telefono?: string;
-  mensaje: string;
-}
-
-export interface CrearConsultaResponse {
+interface ConsultaResponse {
   ok: boolean;
   mensaje: string;
 }
@@ -23,10 +16,12 @@ export class ConsultasService {
 
   constructor(private http: HttpClient) {}
 
-  crearConsulta(body: CrearConsultaBody): Observable<CrearConsultaResponse> {
-    return this.http.post<CrearConsultaResponse>(
-      `${this.apiUrl}/consultas`,
-      body
-    );
+  enviarConsulta(data: {
+    nombre: string;
+    email: string;
+    telefono?: string;
+    mensaje: string;
+  }): Observable<ConsultaResponse> {
+    return this.http.post<ConsultaResponse>(`${this.apiUrl}/consultas`, data);
   }
 }

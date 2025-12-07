@@ -25,7 +25,7 @@ exports.obtenerServicios = async (req, res) => {
 };
 
 // ===============================
-// Obtener un servicio por ID
+// Obtener servicio por ID
 // GET /api/servicios/:id
 // ===============================
 exports.obtenerServicioPorId = async (req, res) => {
@@ -33,14 +33,16 @@ exports.obtenerServicioPorId = async (req, res) => {
     const { id } = req.params;
 
     const [rows] = await db.query(
-      "SELECT id, nombre, descripcion, duracion_minutos, precio, estado, creado_en FROM servicios WHERE id = ?",
+      `SELECT id, nombre, descripcion, precio, duracion_minutos, estado
+       FROM servicios
+       WHERE id = ?`,
       [id]
     );
 
     if (rows.length === 0) {
       return res.status(404).json({
         ok: false,
-        mensaje: "Servicio no encontrado",
+        mensaje: 'Servicio no encontrado',
       });
     }
 
@@ -49,14 +51,15 @@ exports.obtenerServicioPorId = async (req, res) => {
       servicio: rows[0],
     });
   } catch (error) {
-    console.error("Error al obtener servicio:", error);
+    console.error('Error al obtener servicio por id:', error);
     res.status(500).json({
       ok: false,
-      mensaje: "Error al obtener el servicio",
+      mensaje: 'Error al obtener el servicio',
       error: error.message,
     });
   }
 };
+
 
 // ===============================
 // Crear un nuevo servicio
@@ -192,6 +195,81 @@ exports.eliminarServicio = async (req, res) => {
     res.status(500).json({
       ok: false,
       mensaje: "Error al eliminar el servicio",
+      error: error.message,
+    });
+  }
+};
+
+// ===============================
+// Cambiar estado de un servicio
+// PUT /api/servicios/:id/estado
+// Body: { estado: 'activo' | 'inactivo' }
+// ===============================
+exports.cambiarEstadoServicio = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { estado } = req.body;
+
+    // Validar estado
+    const estadosPermitidos = ['activo', 'inactivo'];
+    if (!estadosPermitidos.includes(estado)) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "Estado inválido. Debe ser 'activo' o 'inactivo'.",
+      });
+    }
+
+    const [result] = await db.query(
+      'UPDATE servicios SET estado = ? WHERE id = ?',
+      [estado, id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'Servicio no encontrado',
+      });
+    }
+
+    // Podés devolver el servicio actualizado si querés:
+    const [rows] = await db.query('SELECT * FROM servicios WHERE id = ?', [id]);
+    const servicioActualizado = rows[0];
+
+    res.json({
+      ok: true,
+      mmensaje: `Servicio ${estado === 'activo' ? 'activado' : 'desactivado'} correctamente.`,
+
+      servicio: servicioActualizado,
+    });
+  } catch (error) {
+    console.error('Error al cambiar estado del servicio:', error);
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al cambiar el estado del servicio',
+      error: error.message,
+    });
+  }
+};
+
+// ===============================
+// Obtener TODOS los servicios (admin)
+// GET /api/servicios/admin
+// ===============================
+exports.obtenerServiciosAdmin = async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      'SELECT * FROM servicios ORDER BY nombre ASC'
+    );
+
+    res.json({
+      ok: true,
+      servicios: rows,
+    });
+  } catch (error) {
+    console.error('Error al obtener servicios (admin):', error);
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al obtener la lista completa de servicios',
       error: error.message,
     });
   }

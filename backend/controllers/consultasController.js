@@ -1,56 +1,56 @@
-const db = require("../config/db");
+const db = require('../config/db');
 
 // ===============================
-// Crear consulta
+// Crear consulta (contacto)
 // POST /api/consultas
-// Body: { nombre_apellido, email, telefono?, mensaje }
+// Body: { nombre, email, telefono?, mensaje }
 // ===============================
 exports.crearConsulta = async (req, res) => {
   try {
-    const { nombre_apellido, email, telefono, mensaje } = req.body;
+    const { nombre, email, telefono, mensaje } = req.body;
 
-    if (!nombre_apellido || !email || !mensaje) {
+    if (!nombre || !email || !mensaje) {
       return res.status(400).json({
         ok: false,
-        mensaje: "Faltan datos obligatorios (nombre, email o mensaje).",
+        mensaje: 'Nombre, email y mensaje son obligatorios',
       });
     }
 
     const [result] = await db.query(
-      `INSERT INTO consultas (nombre_apellido, email, telefono, mensaje)
+      `INSERT INTO consultas (nombre, email, telefono, mensaje)
        VALUES (?, ?, ?, ?)`,
-      [nombre_apellido, email, telefono || null, mensaje]
+      [nombre, email, telefono || null, mensaje]
     );
 
     res.status(201).json({
       ok: true,
-      mensaje: "Tu consulta fue enviada correctamente. Te contactaremos a la brevedad.",
+      mensaje: 'Consulta enviada correctamente',
       consulta: {
         id: result.insertId,
-        nombre_apellido,
+        nombre,
         email,
-        telefono,
+        telefono: telefono || null,
         mensaje,
       },
     });
   } catch (error) {
-    console.error("Error al crear consulta:", error);
+    console.error('Error al crear consulta:', error);
     res.status(500).json({
       ok: false,
-      mensaje: "Error al enviar la consulta.",
+      mensaje: 'Error al enviar la consulta',
       error: error.message,
     });
   }
 };
 
 // ===============================
-// Obtener todas las consultas (para admin)
+// (Opcional) Listar consultas (para admin)
 // GET /api/consultas
 // ===============================
-exports.obtenerConsultas = async (_req, res) => {
+exports.obtenerConsultas = async (req, res) => {
   try {
     const [rows] = await db.query(
-      `SELECT * FROM consultas ORDER BY fecha_creacion DESC`
+      `SELECT * FROM consultas ORDER BY fecha_envio DESC`
     );
 
     res.json({
@@ -58,10 +58,10 @@ exports.obtenerConsultas = async (_req, res) => {
       consultas: rows,
     });
   } catch (error) {
-    console.error("Error al obtener consultas:", error);
+    console.error('Error al obtener consultas:', error);
     res.status(500).json({
       ok: false,
-      mensaje: "Error al obtener las consultas.",
+      mensaje: 'Error al obtener las consultas',
       error: error.message,
     });
   }

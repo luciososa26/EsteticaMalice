@@ -1,32 +1,127 @@
-<div class="inicio-wrapper">
-  <div class="inicio-card" *ngIf="usuario; else sinUsuario">
-    <h1>Hola, {{ usuario.nombre_apellido }} 👋</h1>
-    <p>Bienvenido/a a MaliceEstetica.</p>
+<main class="inicio">
 
-    <div class="info">
-      <p><strong>Email:</strong> {{ usuario.email }}</p>
-      <p><strong>Teléfono:</strong> {{ usuario.telefono || 'No cargado' }}</p>
-      <p><strong>Rol:</strong> {{ usuario.rol }}</p>
+  <!-- ========================= -->
+  <!--        HERO / PORTADA    -->
+  <!-- ========================= -->
+  <section class="inicio__hero">
+    <div class="inicio__hero-texto">
+      <h1>Malice Estética</h1>
+      <p>
+        Reserva tus turnos de forma simple y rápida. Cuidamos tus manos, piel y
+        mirada con servicios profesionales pensados para vos.
+      </p>
+
+      <div class="inicio__hero-acciones">
+        <button type="button" (click)="irAReservarTurno()">
+          Reservar turno
+        </button>
+
+        <button type="button" (click)="irAServicios()">
+          Ver servicios
+        </button>
+      </div>
+
+      <p class="inicio__hero-nota">
+        * Necesitás iniciar sesión para reservar un turno.
+      </p>
     </div>
 
-    <a routerLink="/servicios" class="link-servicios">
-      Ver servicios disponibles
-    </a>
+    <div class="inicio__hero-imagen">
+      <!-- Más adelante acá podemos poner una imagen linda o collage -->
+      <div class="inicio__hero-placeholder">
+        Imagen de estética / manos / uñas
+      </div>
+    </div>
+  </section>
 
-    <a routerLink="/turnos" class="link-servicios">
-      Sacar un turno
-    </a>
+  <!-- ========================= -->
+  <!--   SERVICIOS DESTACADOS    -->
+  <!-- ========================= -->
+  <section class="inicio__servicios">
+    <header>
+      <h2>Servicios destacados</h2>
+      <p>
+        Algunos de los servicios más elegidos. Podés ver el listado completo en
+        la sección <strong>Servicios</strong>.
+      </p>
+    </header>
 
-  </div>
+    <div *ngIf="cargandoServicios">
+      Cargando servicios...
+    </div>
 
-  <ng-template #sinUsuario>
-    <h2>No hay usuario logueado.</h2>
-    <p>
-      <a routerLink="/login">Iniciar sesión</a> o
-      <a routerLink="/register">crear una cuenta</a>
-    </p>
-  </ng-template>
+    <div *ngIf="!cargandoServicios && errorServicios">
+      {{ errorServicios }}
+    </div>
 
-  <p *ngIf="cargando">Cargando datos...</p>
-  <p *ngIf="errorMsg" class="error">{{ errorMsg }}</p>
-</div>
+    <div
+      *ngIf="!cargandoServicios && !errorServicios && serviciosDestacados.length === 0"
+    >
+      Todavía no hay servicios cargados.
+    </div>
+
+    <div
+      class="inicio__servicios-grid"
+      *ngIf="serviciosDestacados.length > 0"
+    >
+      <article
+        class="servicio-card"
+        *ngFor="let s of serviciosDestacados"
+      >
+        <h3>{{ s.nombre }}</h3>
+        <p *ngIf="s.descripcion">
+          {{ s.descripcion }}
+        </p>
+        <p class="servicio-card__precio">
+          $ {{ s.precio }}
+        </p>
+        <p *ngIf="s.duracion_minutos">
+          Duración aprox: {{ s.duracion_minutos }} min
+        </p>
+      </article>
+    </div>
+
+    <div class="inicio__servicios-cta">
+      <button type="button" (click)="irAServicios()">
+        Ver todos los servicios
+      </button>
+    </div>
+  </section>
+
+  <!-- ========================= -->
+  <!--      CÓMO FUNCIONA        -->
+  <!-- ========================= -->
+  <section class="inicio__pasos">
+    <header>
+      <h2>¿Cómo funciona?</h2>
+      <p>Reservar tu turno es súper fácil:</p>
+    </header>
+
+    <ol class="inicio__pasos-lista">
+      <li>
+        <h3>1. Creá tu cuenta</h3>
+        <p>
+          Registrate con tu nombre, email y una contraseña. Lo vas a usar para
+          ver tus turnos y reservar nuevos.
+        </p>
+      </li>
+
+      <li>
+        <h3>2. Elegí servicio y horario</h3>
+        <p>
+          Desde la sección <strong>Turnos</strong>, seleccioná el día, la hora,
+          el servicio y la profesional que prefieras.
+        </p>
+      </li>
+
+      <li>
+        <h3>3. Gestioná tus turnos</h3>
+        <p>
+          Desde <strong>Mi cuenta</strong> podés ver tus turnos reservados y
+          cancelarlos si lo necesitás.
+        </p>
+      </li>
+    </ol>
+  </section>
+
+</main>

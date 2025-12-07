@@ -1,0 +1,52 @@
+<div class="servicio-detalle-wrapper">
+  <!-- CONTENIDO OK -->
+  <div class="servicio-detalle-card" *ngIf="!cargando && servicio">
+    <button class="volver" type="button" (click)="volverAListado()">
+      ← Volver a servicios
+    </button>
+
+    <div class="servicio-detalle-header">
+      <h1>{{ servicio.nombre }}</h1>
+      <p class="servicio-detalle-estado" *ngIf="servicio.estado">
+        Estado: {{ servicio.estado }}
+      </p>
+    </div>
+
+    <div class="servicio-detalle-contenido">
+      <div class="servicio-detalle-info">
+        <p *ngIf="servicio.descripcion">
+          {{ servicio.descripcion }}
+        </p>
+
+        <p class="servicio-detalle-precio">
+          Precio: $ {{ servicio.precio }}
+        </p>
+
+        <p *ngIf="servicio.duracion_minutos">
+          Duración aprox: {{ servicio.duracion_minutos }} minutos
+        </p>
+
+        <button type="button" class="btn-reservar" (click)="irAReservar()">
+          Reservar este servicio
+        </button>
+      </div>
+
+      <div class="servicio-detalle-imagen" *ngIf="servicio.imagen_url">
+        <img [src]="servicio.imagen_url" [alt]="servicio.nombre" />
+      </div>
+    </div>
+  </div>
+
+  <!-- CARGANDO -->
+  <div class="servicio-detalle-card" *ngIf="cargando">
+    Cargando servicio...
+  </div>
+
+  <!-- ERROR -->
+  <div class="servicio-detalle-card error" *ngIf="!cargando && errorMsg">
+    {{ errorMsg }}
+    <button class="volver" type="button" (click)="volverAListado()">
+      Volver a servicios
+    </button>
+  </div>
+</div>

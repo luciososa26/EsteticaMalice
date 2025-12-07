@@ -1,0 +1,117 @@
+.admin-servicios-wrapper {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #f8f3f0;
+
+  display: flex;
+  justify-content: center;
+}
+
+.admin-servicios-card {
+  width: 100%;
+  max-width: 1000px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 22px 22px 26px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+  font-size: 14px;
+}
+
+.admin-servicios-header {
+  margin-bottom: 16px;
+
+  h1 {
+    margin: 0 0 6px;
+    font-size: 24px;
+  }
+
+  p {
+    margin: 0;
+    opacity: 0.8;
+  }
+}
+
+.estado {
+  margin: 8px 0;
+  font-size: 13px;
+  opacity: 0.9;
+
+  &--error {
+    color: #c0392b;
+    font-weight: 600;
+  }
+
+  &--ok {
+    color: #2e7d32;
+    font-weight: 600;
+  }
+}
+
+.tabla-wrapper {
+  margin-top: 12px;
+  overflow-x: auto;
+}
+
+.tabla-servicios {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  thead {
+    background: #fbfbf3;
+  }
+
+  th,
+  td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+  }
+
+  th.col-acciones,
+  td.acciones {
+    text-align: center;
+    white-space: nowrap;
+  }
+}
+
+/* Badge de estado */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+
+  &--activo {
+    background: #e0f7ec;
+    color: #2e7d32;
+  }
+
+  &--inactivo {
+    background: #fce4e4;
+    color: #c0392b;
+  }
+}
+
+/* Botón acción */
+.btn-accion {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: none;
+  background: #d7a887;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.15s ease, transform 0.1s ease;
+
+  &:hover:not(:disabled) {
+    background: #c28c68;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+}

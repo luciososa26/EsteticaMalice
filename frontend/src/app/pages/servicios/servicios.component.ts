@@ -4,11 +4,12 @@ import {
   ServiciosService,
   Servicio,
 } from '../../core/services/servicios.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-servicios',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './servicios.component.html',
   styleUrls: ['./servicios.component.scss'],
 })

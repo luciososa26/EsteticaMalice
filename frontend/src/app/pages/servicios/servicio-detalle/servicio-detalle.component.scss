@@ -1,0 +1,108 @@
+.servicio-detalle-wrapper {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #f8f3f0;
+  display: flex;
+  justify-content: center;
+}
+
+.servicio-detalle-card {
+  width: 100%;
+  max-width: 850px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 22px 22px 26px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+  font-size: 14px;
+}
+
+.servicio-detalle-card.error {
+  text-align: center;
+  color: #c0392b;
+}
+
+/* Botón volver */
+.volver {
+  border: none;
+  background: transparent;
+  color: #555;
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  padding: 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.servicio-detalle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 12px;
+
+  h1 {
+    font-size: 24px;
+    margin: 0;
+  }
+
+  .servicio-detalle-estado {
+    font-size: 13px;
+    opacity: 0.8;
+  }
+}
+
+.servicio-detalle-contenido {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: flex-start;
+
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.servicio-detalle-info p {
+  margin: 4px 0;
+  line-height: 1.5;
+}
+
+.servicio-detalle-precio {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Botón reservar */
+.btn-reservar {
+  margin-top: 16px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  background: #d7a887;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    background: #c28c68;
+    transform: translateY(-2px);
+  }
+}
+
+/* Imagen */
+.servicio-detalle-imagen {
+  display: flex;
+  justify-content: center;
+
+  img {
+    max-width: 100%;
+    border-radius: 16px;
+    object-fit: cover;
+    max-height: 260px;
+  }
+}

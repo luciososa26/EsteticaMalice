@@ -1,15 +1,17 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
 const {
   crearConsulta,
   obtenerConsultas,
-} = require("../controllers/consultasController");
+} = require('../controllers/consultasController');
 
-// Crear consulta (pública, sin login)
-router.post("/", crearConsulta);
+// En el futuro, GET lo podés proteger con verifyToken + rol ADMIN
 
-// Listar consultas (después se puede proteger con verifyToken y rol ADMIN)
-router.get("/", obtenerConsultas);
+// Enviar consulta (público)
+router.post('/', crearConsulta);
+
+// Listar consultas (admin)
+router.get('/', obtenerConsultas);
 
 module.exports = router;

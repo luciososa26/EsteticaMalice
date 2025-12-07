@@ -1,15 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  ReactiveFormsModule,
   FormBuilder,
   FormGroup,
   Validators,
+  ReactiveFormsModule,
 } from '@angular/forms';
-import {
-  ConsultasService,
-  CrearConsultaBody,
-} from '../../core/services/consultas.service';
+import { ConsultasService } from '../../core/services/consultas.service';
 
 @Component({
   selector: 'app-contacto',
@@ -29,7 +26,7 @@ export class ContactoComponent {
     private consultasService: ConsultasService
   ) {
     this.contactoForm = this.fb.group({
-      nombre_apellido: ['', [Validators.required, Validators.minLength(3)]],
+      nombre: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       telefono: [''],
       mensaje: ['', [Validators.required, Validators.minLength(10)]],
@@ -41,23 +38,21 @@ export class ContactoComponent {
     return !!control && control.invalid && control.touched;
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.mensajeOk = '';
     this.errorMsg = '';
 
     if (this.contactoForm.invalid) {
       this.contactoForm.markAllAsTouched();
-      this.errorMsg = 'Revisá los campos marcados en rojo.';
       return;
     }
 
-    const body: CrearConsultaBody = this.contactoForm.value;
     this.enviando = true;
 
-    this.consultasService.crearConsulta(body).subscribe({
+    this.consultasService.enviarConsulta(this.contactoForm.value).subscribe({
       next: (resp) => {
         if (resp.ok) {
-          this.mensajeOk = resp.mensaje;
+          this.mensajeOk = resp.mensaje || 'Consulta enviada correctamente.';
           this.contactoForm.reset();
         } else {
           this.errorMsg = resp.mensaje || 'No se pudo enviar la consulta.';

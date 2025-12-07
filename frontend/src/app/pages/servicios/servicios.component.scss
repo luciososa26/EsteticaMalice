@@ -1,16 +1,12 @@
 .servicios-wrapper {
-  min-height: 100vh;
   padding: 40px 20px;
-  background: #f8f3f0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .servicios-header {
-  max-width: 800px;
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 30px;
 
   h1 {
     margin: 0 0 8px;
@@ -18,70 +14,79 @@
   }
 
   p {
-    margin: 0;
-    color: #555;
+    opacity: 0.7;
   }
 }
 
 .estado {
-  margin-top: 12px;
-  color: #555;
   text-align: center;
+  margin-top: 20px;
+  opacity: 0.75;
 
   &.error {
-    color: #c0392b;
+    color: #b33939;
+    font-weight: bold;
   }
 }
 
+/* GRID */
 .grid {
-  width: 100%;
-  max-width: 1000px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
-  margin-top: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 22px;
 }
 
+/* TARJETA */
 .card {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 16px 18px;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+  background: #fff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  justify-content: space-between;
 
   h2 {
-    margin: 0;
-    font-size: 18px;
+    margin: 0 0 10px;
+    font-size: 20px;
   }
 
   .descripcion {
-    margin: 0;
     font-size: 14px;
-    color: #555;
+    line-height: 1.4;
 
-    &--vacía {
+    &--vacia {
+      opacity: 0.6;
       font-style: italic;
-      color: #888;
     }
   }
 
   .meta {
-    margin-top: 8px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    font-weight: 500;
+    margin: 16px 0;
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
 
-    .duracion {
-      font-size: 13px;
-      color: #555;
-    }
+/* BOTÓN VER DETALLE */
+.btn-detalle {
+  margin-top: auto;
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #d7a887;
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.2s ease;
 
-    .precio {
-      font-size: 16px;
-      color: #6b443d;
-    }
+  &:hover {
+    background: #c28c68;
+    transform: translateY(-2px);
   }
 }

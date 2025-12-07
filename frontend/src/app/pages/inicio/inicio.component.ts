@@ -1,45 +1,61 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';      // 👈 IMPORTANTE
-import { AuthService } from '../../core/services/auth.service';
+import { RouterModule, Router } from '@angular/router';
+import {
+  ServiciosService,
+  Servicio,
+} from '../../core/services/servicios.service';
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [CommonModule, RouterModule],            // 👈 AGREGAR RouterModule
+  imports: [CommonModule, RouterModule],
   templateUrl: './inicio.component.html',
-  styleUrls: ['./inicio.component.scss'],
+  styleUrls: ['./inicio.component.scss'], // aunque esté vacío por ahora
 })
 export class InicioComponent implements OnInit {
-  usuario: any = null;
-  cargando = false;
-  errorMsg = '';
+  serviciosDestacados: Servicio[] = [];
+  cargandoServicios = false;
+  errorServicios = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private serviciosService: ServiciosService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    // Si no hay token, no molestamos al backend
-    if (!this.authService.estaLogueado()) {
-      return;
-    }
+    this.cargarServiciosDestacados();
+  }
 
-    this.cargando = true;
-    this.authService.me().subscribe({
+  private cargarServiciosDestacados(): void {
+    this.cargandoServicios = true;
+    this.errorServicios = '';
+
+    this.serviciosService.obtenerServicios().subscribe({
       next: (resp) => {
-        if (resp.ok && resp.usuario) {
-          this.usuario = resp.usuario;
+        if (resp.ok && resp.servicios?.length) {
+          // Tomamos los primeros 3 como "destacados"
+          this.serviciosDestacados = resp.servicios.slice(0, 3);
         } else {
-          this.errorMsg = resp.mensaje || 'No se pudo cargar el usuario.';
+          this.serviciosDestacados = [];
         }
       },
       error: (err) => {
-        console.error('Error al pedir /me:', err);
-        this.errorMsg =
-          err.error?.mensaje || 'Error al cargar los datos del usuario.';
+        console.error('Error al obtener servicios destacados:', err);
+        this.errorServicios =
+          err.error?.mensaje || 'No se pudieron cargar los servicios.';
       },
       complete: () => {
-        this.cargando = false;
+        this.cargandoServicios = false;
       },
     });
+  }
+
+  irAReservarTurno(): void {
+    this.router.navigate(['/turnos']);
+  }
+
+  irAServicios(): void {
+    this.router.navigate(['/servicios']);
   }
 }

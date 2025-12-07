@@ -1,0 +1,68 @@
+<div class="admin-servicios-wrapper">
+  <div class="admin-servicios-card">
+    <div class="admin-servicios-header">
+      <h1>Gestión de servicios</h1>
+      <p>
+        Desde aquí podés activar, pausar y revisar los servicios de la estética.
+      </p>
+    </div>
+
+    <!-- ESTADOS -->
+    <p *ngIf="cargando" class="estado">Cargando servicios...</p>
+    <p *ngIf="errorMsg" class="estado estado--error">{{ errorMsg }}</p>
+    <p *ngIf="mensajeOk" class="estado estado--ok">{{ mensajeOk }}</p>
+
+    <!-- TABLA -->
+    <div *ngIf="!cargando && servicios.length > 0" class="tabla-wrapper">
+      <table class="tabla-servicios">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Duración</th>
+            <th>Precio</th>
+            <th>Estado</th>
+            <th class="col-acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of servicios">
+            <td>{{ s.nombre }}</td>
+            <td>{{ s.duracion_minutos }} min</td>
+            <td>$ {{ s.precio | number : '1.0-0' }}</td>
+            <td>
+              <span class="badge" [ngClass]="{
+                'badge--activo': s.estado === 'activo',
+                'badge--pausado': s.estado === 'inactivo'
+              }">
+                {{ s.estado || 'sin estado' }}
+              </span>
+            </td>
+            <td class="acciones">
+              <!-- Más adelante podemos agregar botón Editar -->
+              <button
+                type="button"
+                class="btn-accion"
+                (click)="toggleEstado(s)"
+                [disabled]="cambiandoId === s.id"
+              >
+                {{
+                  cambiandoId === s.id
+                    ? 'Actualizando...'
+                    : (s.estado === 'activo' ? 'Activo' : 'Inactivo')
+                }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SIN SERVICIOS -->
+    <p
+      *ngIf="!cargando && servicios.length === 0 && !errorMsg"
+      class="estado"
+    >
+      No hay servicios cargados por el momento.
+    </p>
+  </div>
+</div>

@@ -1,0 +1,116 @@
+.contacto-wrapper {
+  min-height: 100vh;
+  padding: 40px 16px;
+  background: #f8f3f0;
+  display: flex;
+  justify-content: center;
+}
+
+.contacto-form {
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 24px 22px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+}
+
+.contacto-wrapper h1 {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto 8px;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.contacto-wrapper > p {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto 16px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* GRUPOS DE CAMPOS */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+
+  label {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  input,
+  textarea {
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    resize: vertical;
+  }
+
+  input:focus,
+  textarea:focus {
+    border-color: #d7a887;
+    box-shadow: 0 0 0 2px rgba(215, 168, 135, 0.25);
+  }
+}
+
+/* BOTÓN */
+button[type='submit'] {
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #d7a887;
+  color: #fff;
+  transition: background 0.15s ease, transform 0.1s ease,
+    box-shadow 0.1s ease;
+}
+
+button[type='submit']:hover:not(:disabled) {
+  background: #c28c68;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.16);
+}
+
+button[type='submit']:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+/* MENSAJES */
+.error {
+  color: #c0392b;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.ok {
+  color: #2e7d32;
+  font-size: 13px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .contacto-form {
+    padding: 20px 16px;
+  }
+
+  .contacto-wrapper h1 {
+    font-size: 22px;
+  }
+}

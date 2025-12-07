@@ -1,0 +1,65 @@
+<div class="admin-wrapper">
+  <div class="admin-header">
+    <h1>Panel administrador</h1>
+    <p>
+      Desde aquí podés gestionar los servicios, profesionales y turnos de
+      Malice Estética.
+    </p>
+  </div>
+
+  <div class="admin-grid">
+    <!-- Servicios -->
+    <article class="admin-card">
+      <h2>Servicios</h2>
+      <p>
+        Crear, editar y pausar servicios disponibles para las clientas.
+      </p>
+
+      <ul>
+        <li>Ver listado de servicios</li>
+        <li>Actualizar precios</li>
+        <li>Activar / pausar servicios</li>
+      </ul>
+
+      <a class="admin-btn" [routerLink]="['/admin/servicios']">
+        Ir a gestión de servicios →
+      </a>
+    </article>
+
+    <!-- Profesionales -->
+    <article class="admin-card">
+      <h2>Profesionales</h2>
+      <p>
+        Administrar el equipo de profesionales de la estética.
+      </p>
+
+      <ul>
+        <li>Ver profesionales activos</li>
+        <li>Asignar especialidades</li>
+        <li>Activar / desactivar perfiles</li>
+      </ul>
+
+      <a class="admin-btn" [routerLink]="['/admin/profesionales']">
+        Ir a gestión de profesionales →
+      </a>
+    </article>
+
+    <!-- Turnos -->
+    <article class="admin-card">
+      <h2>Turnos</h2>
+      <p>
+        Revisar y controlar los turnos reservados por las clientas.
+      </p>
+
+      <ul>
+        <li>Ver próximos turnos</li>
+        <li>Filtrar por fecha o profesional</li>
+        <li>Ver estado: pendiente / cancelado / confirmado</li>
+      </ul>
+
+      <a class="admin-btn" [routerLink]="['/admin/turnos']">
+        Ir a vista de turnos →
+      </a>
+    </article>
+  </div>
+</div>
