@@ -2,7 +2,7 @@
   <div class="admin-header">
     <h1>Panel administrador</h1>
     <p>
-      Desde aquí podés gestionar los servicios, profesionales y turnos de
+      Desde aquí podés gestionar los servicios, profesionales, turnos y consultas de
       Malice Estética.
     </p>
   </div>
@@ -59,6 +59,24 @@
 
       <a class="admin-btn" [routerLink]="['/admin/turnos']">
         Ir a vista de turnos →
+      </a>
+    </article>
+
+    <!-- Consultas (NUEVO) -->
+    <article class="admin-card">
+      <h2>Consultas</h2>
+      <p>
+        Ver y administrar las consultas enviadas desde la página de contacto.
+      </p>
+
+      <ul>
+        <li>Ver mensajes de clientas</li>
+        <li>Marcar como respondida</li>
+        <li>Volver a estado pendiente</li>
+      </ul>
+
+      <a class="admin-btn" [routerLink]="['/admin/consultas']">
+        Ir a gestión de consultas →
       </a>
     </article>
   </div>

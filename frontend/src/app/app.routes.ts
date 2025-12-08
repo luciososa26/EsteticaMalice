@@ -17,6 +17,7 @@ import { AdminProfesionalesComponent } from './pages/admin/admin-profesionales/a
 import { AdminProfesionalFormComponent } from './pages/admin/admin-profesionales/admin-profesionales-form/admin-profesionales-form.component';
 import { AdminTurnosComponent } from './pages/admin/admin-turnos/admin-turnos.component';
 import { AdminTurnosFormComponent } from './pages/admin/admin-turnos/admin-turnos-form/admin-turnos-form.component';
+import { AdminConsultasComponent } from './pages/admin/admin-consultas/admin-consultas.component';
 
 export const routes: Routes = [
 
@@ -75,6 +76,8 @@ export const routes: Routes = [
     path: 'admin/turnos/editar/:id',
     component: AdminTurnosFormComponent,
   },
+  { path: 'admin/consultas', 
+    component: AdminConsultasComponent },
 
   // ============================
   //  REDIRECCIONES / 404

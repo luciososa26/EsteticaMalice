@@ -66,3 +66,57 @@ exports.obtenerConsultas = async (req, res) => {
     });
   }
 };
+
+// ===============================
+// Cambiar estado de una consulta
+// PUT /api/consultas/:id/estado
+// Body: { estado: 'pendiente' | 'respondida' | 'archivada' }
+// ===============================
+exports.cambiarEstadoConsulta = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { estado } = req.body;
+
+    // VALIDAR que el estado sea uno de los permitidos en el ENUM
+    const estadosPermitidos = ['pendiente', 'respondida', 'archivada'];
+
+    if (!estadosPermitidos.includes(estado)) {
+      return res.status(400).json({
+        ok: false,
+        mensaje:
+          'Estado inválido. Debe ser "pendiente", "respondida" o "archivada".',
+      });
+    }
+
+    const [result] = await db.query(
+      'UPDATE consultas SET estado = ? WHERE id = ?',
+      [estado, id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'Consulta no encontrada',
+      });
+    }
+
+    // Opcional: devolver la consulta actualizada
+    const [rows] = await db.query(
+      'SELECT * FROM consultas WHERE id = ?',
+      [id]
+    );
+
+    return res.json({
+      ok: true,
+      mensaje: 'Estado de la consulta actualizado correctamente',
+      consulta: rows[0],
+    });
+  } catch (error) {
+    console.error('Error al cambiar estado de la consulta:', error);
+    return res.status(500).json({
+      ok: false,
+      mensaje: 'Error al cambiar el estado de la consulta',
+      error: error.message,
+    });
+  }
+};

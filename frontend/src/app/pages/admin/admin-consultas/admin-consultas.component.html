@@ -1,0 +1,70 @@
+<div class="admin-consultas">
+  <div class="admin-consultas__header">
+    <h1>Consultas de clientes</h1>
+    <p>Acá podés ver y marcar como respondidas las consultas enviadas desde el sitio.</p>
+  </div>
+
+  <p *ngIf="cargando" class="estado">Cargando consultas...</p>
+  <p *ngIf="errorMsg" class="estado estado--error">{{ errorMsg }}</p>
+  <p *ngIf="mensajeOk" class="estado estado--ok">{{ mensajeOk }}</p>
+
+  <div class="tabla-wrapper" *ngIf="!cargando && consultas.length > 0">
+    <table class="tabla-consultas">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Teléfono</th>
+          <th>Mensaje</th>
+          <th>Fecha</th>
+          <th>Estado</th>
+          <th class="col-acciones">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let c of consultas">
+          <td>{{ c.nombre }}</td>
+          <td>
+            <a [href]="'mailto:' + c.email">{{ c.email }}</a>
+          </td>
+          <td>{{ c.telefono || '-' }}</td>
+          <td>
+            <div class="mensaje">
+              {{ c.mensaje }}
+            </div>
+          </td>
+          <td>
+            {{ c.creado_en | date : 'short' }}
+          </td>
+          <td>
+            <span [ngClass]="getBadgeClass(c.estado)">
+              {{ c.estado }}
+            </span>
+          </td>
+          <td class="col-acciones">
+            <button
+              type="button"
+              class="btn-estado"
+              (click)="toggleEstado(c)"
+              [disabled]="accionandoId === c.id"
+            >
+              {{
+                c.estado === 'pendiente'
+                  ? 'Marcar respondida'
+                  : 'Volver a pendiente'
+              }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p
+    *ngIf="!cargando && consultas.length === 0 && !errorMsg"
+    class="estado"
+  >
+    No hay consultas registradas por el momento.
+  </p>
+</div>
