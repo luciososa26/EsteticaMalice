@@ -1,0 +1,67 @@
+.turnos-form {
+  max-width: 480px;
+  margin: 24px auto;
+  background: #fff;
+  padding: 24px 28px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+
+  h1 {
+    margin-bottom: 16px;
+    font-size: 24px;
+    color: #4f5d32;
+    font-weight: 700;
+  }
+
+  .form-group {
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+
+    label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #333;
+    }
+
+    input,
+    select {
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+  }
+
+  .error {
+    color: #c0392b;
+    margin-bottom: 10px;
+  }
+
+  .ok {
+    color: #2e7d32;
+    margin-bottom: 10px;
+  }
+
+  .btn-guardar,
+  .btn-volver {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+  }
+
+  .btn-guardar {
+    background: #79a085;
+    color: #fff;
+  }
+
+  .btn-volver {
+    background: #e0e0e0;
+    color: #333;
+  }
+}

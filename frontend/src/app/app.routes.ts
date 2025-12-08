@@ -15,6 +15,8 @@ import { PanelAdminComponent } from './pages/admin/panel-admin/panel-admin.compo
 import { AdminServiciosComponent } from './pages/admin/admin-servicios/admin-servicios.component';
 import { AdminProfesionalesComponent } from './pages/admin/admin-profesionales/admin-profesionales.component';
 import { AdminProfesionalFormComponent } from './pages/admin/admin-profesionales/admin-profesionales-form/admin-profesionales-form.component';
+import { AdminTurnosComponent } from './pages/admin/admin-turnos/admin-turnos.component';
+import { AdminTurnosFormComponent } from './pages/admin/admin-turnos/admin-turnos-form/admin-turnos-form.component';
 
 export const routes: Routes = [
 
@@ -64,6 +66,14 @@ export const routes: Routes = [
   {
     path:'admin/profesionales/editar/:id',
     component:AdminProfesionalFormComponent,
+  },
+  {
+    path: 'admin/turnos',
+    component: AdminTurnosComponent,
+  },
+  {
+    path: 'admin/turnos/editar/:id',
+    component: AdminTurnosFormComponent,
   },
 
   // ============================

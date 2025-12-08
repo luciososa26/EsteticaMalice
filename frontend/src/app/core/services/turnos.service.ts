@@ -3,20 +3,23 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
+// ============================
+// MODELOS
+// ============================
 export interface Turno {
   id: number;
-  usuario?: string;
+  usuario?: string;   // en admin se usa
   profesional: string;
   servicio: string;
   fecha: string;
-  hora: string;
-  estado: string;
+  hora: string;       // "11:00:00"
+  estado: 'pendiente' | 'confirmado' | 'cancelado';
 }
 
 interface CrearTurnoResponse {
   ok: boolean;
   mensaje: string;
-  turno?: any;
+  turno?: Turno;
 }
 
 interface TurnosResponse {
@@ -36,6 +39,23 @@ export interface TurnosPorFechaResponse {
   mensaje?: string;
 }
 
+interface ActualizarTurnoResponse {
+  ok: boolean;
+  mensaje: string;
+  turno?: Turno;
+}
+
+interface ActualizarTurnoPayload {
+  id_servicio?: number;
+  id_profesional?: number;
+  fecha?: string; // YYYY-MM-DD
+  hora?: string;  // HH:mm:ss
+  estado?: 'pendiente' | 'confirmado' | 'cancelado';
+}
+
+// ============================
+// SERVICIO
+// ============================
 @Injectable({
   providedIn: 'root',
 })
@@ -44,7 +64,9 @@ export class TurnosService {
 
   constructor(private http: HttpClient) {}
 
-  // POST /api/turnos
+  // ============================
+  // CREAR TURNO
+  // ============================
   crearTurno(data: {
     id_usuario: number;
     id_servicio: number;
@@ -55,25 +77,50 @@ export class TurnosService {
     return this.http.post<CrearTurnoResponse>(`${this.apiUrl}/turnos`, data);
   }
 
-  // GET /api/turnos/usuario/:idUsuario
+  // ============================
+  // TURNOS DE UN USUARIO
+  // ============================
   obtenerTurnosUsuario(idUsuario: number): Observable<TurnosResponse> {
     return this.http.get<TurnosResponse>(
       `${this.apiUrl}/turnos/usuario/${idUsuario}`
     );
   }
 
-  // 👇 NUEVO: cancelar turno
-  // Ajustá la ruta si tu backend usa otra:
-  // por ejemplo: `${this.apiUrl}/turnos/cancelar/${id}`
+  // ============================
+  // CANCELAR TURNO (cliente o admin)
+  // ============================
   cancelarTurno(id: number): Observable<CancelarTurnoResponse> {
     return this.http.put<CancelarTurnoResponse>(
       `${this.apiUrl}/turnos/${id}/cancelar`,
       {}
     );
   }
+
+  // ============================
+  // TURNOS POR FECHA (para saber ocupados)
+  // ============================
   obtenerTurnosPorFecha(fecha: string): Observable<TurnosPorFechaResponse> {
     return this.http.get<TurnosPorFechaResponse>(
       `${this.apiUrl}/turnos/fecha/${fecha}`
+    );
+  }
+
+  // ============================
+  // NUEVO: obtener TODOS los turnos (admin)
+  // ============================
+  obtenerTurnosAdmin(): Observable<TurnosResponse> {
+    return this.http.get<TurnosResponse>(`${this.apiUrl}/turnos`);
+  }
+  // ============================
+  // ACTUALIZAR TURNO (admin)
+  // ============================
+  actualizarTurno(
+    id: number,
+    data: ActualizarTurnoPayload
+  ): Observable<ActualizarTurnoResponse> {
+    return this.http.put<ActualizarTurnoResponse>(
+      `${this.apiUrl}/turnos/${id}`,
+      data
     );
   }
 }
