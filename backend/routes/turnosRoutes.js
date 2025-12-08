@@ -7,6 +7,7 @@ const {
   obtenerTurnosPorUsuario,
   cancelarTurno,
   obtenerTurnosPorFecha,
+  actualizarTurno,
 } = require("../controllers/turnosController");
 
 // Más adelante se protege con verifyToken + rol
@@ -26,5 +27,8 @@ router.get("/fecha/:fecha", /* verifyToken, */ obtenerTurnosPorFecha);
 
 // Cancelar turno
 router.put("/:id/cancelar", /* verifyToken, */ cancelarTurno);
+
+// Editar turno (admin)
+router.put("/:id", /* verifyToken, verifyAdmin, */ actualizarTurno);
 
 module.exports = router;

@@ -6,22 +6,16 @@ const {
   obtenerProfesionales,
   actualizarProfesional,
   obtenerProfesionalPorId,
+  obtenerProfesionalesActivos,
+  cambiarEstadoProfesional,
 } = require('../controllers/profesionalesController');
 
-// Más adelante podés activar middlewares:
-// const verifyToken = require('../middleware/verifyToken');
-// const verifyAdmin = require('../middleware/verifyAdmin');
+router.get('/', obtenerProfesionales);          
+router.get('/activos', obtenerProfesionalesActivos); 
+router.get('/:id', obtenerProfesionalPorId);
+router.post('/', crearProfesional);
+router.put('/:id', actualizarProfesional);
+router.put('/:id/estado', cambiarEstadoProfesional);
 
-// Lista completa (admin)
-router.get('/', /* verifyToken, verifyAdmin, */ obtenerProfesionales);
-
-// Detalle por ID
-router.get('/:id', /* verifyToken, verifyAdmin, */ obtenerProfesionalPorId);
-
-// Crear profesional
-router.post('/', /* verifyToken, verifyAdmin, */ crearProfesional);
-
-// Actualizar profesional
-router.put('/:id', /* verifyToken, verifyAdmin, */ actualizarProfesional);
 
 module.exports = router;

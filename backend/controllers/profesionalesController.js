@@ -1,13 +1,15 @@
 const db = require("../config/db");
 
 // ===============================
-// Obtener todos los profesionales activos
+// Obtener TODOS los profesionales (ADMIN / general)
 // GET /api/profesionales
 // ===============================
 exports.obtenerProfesionales = async (req, res) => {
   try {
     const [rows] = await db.query(
-      "SELECT id, nombre_apellido, especialidad, telefono, estado, creado_en FROM profesionales WHERE estado = 'activo' ORDER BY nombre_apellido ASC"
+      `SELECT id, nombre_apellido, especialidad, telefono, estado, creado_en
+       FROM profesionales
+       ORDER BY nombre_apellido ASC`
     );
 
     res.json({
@@ -25,9 +27,36 @@ exports.obtenerProfesionales = async (req, res) => {
 };
 
 // ===============================
+// Obtener SOLO profesionales activos
+// GET /api/profesionales/activos
+// ===============================
+exports.obtenerProfesionalesActivos = async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT id, nombre_apellido, especialidad, telefono, estado, creado_en
+       FROM profesionales
+       WHERE estado = 'activo'
+       ORDER BY nombre_apellido ASC`
+    );
+
+    res.json({
+      ok: true,
+      profesionales: rows,
+    });
+  } catch (error) {
+    console.error("Error al obtener profesionales activos:", error);
+    res.status(500).json({
+      ok: false,
+      mensaje: "Error al obtener los profesionales activos",
+      error: error.message,
+    });
+  }
+};
+
+// ===============================
 // Crear profesional
 // POST /api/profesionales
-// Body: { nombre_apellido, especialidad, telefono }
+// Body: { nombre_apellido, especialidad, telefono, estado }
 // ===============================
 exports.crearProfesional = async (req, res) => {
   try {
@@ -41,7 +70,7 @@ exports.crearProfesional = async (req, res) => {
 
     res.json({
       ok: true,
-      mensaje: 'Profesional creado correctamente',
+      mensaje: "Profesional creado correctamente",
       profesional: {
         id: result.insertId,
         nombre_apellido,
@@ -51,33 +80,10 @@ exports.crearProfesional = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Error al crear profesional:', error);
-    res.status(500).json({ ok: false, mensaje: 'Error al crear profesional' });
-  }
-};
-
-
-// ===============================
-// Obtener TODOS los profesionales (admin)
-// GET /api/profesionales/admin
-// ===============================
-exports.obtenerProfesionalesAdmin = async (req, res) => {
-  try {
-    const [rows] = await db.query(
-      'SELECT * FROM profesionales ORDER BY nombre_apellido ASC'
-    );
-
-    res.json({
-      ok: true,
-      profesionales: rows,
-    });
-  } catch (error) {
-    console.error('Error al obtener profesionales (admin):', error);
-    res.status(500).json({
-      ok: false,
-      mensaje: 'Error al obtener la lista de profesionales',
-      error: error.message,
-    });
+    console.error("Error al crear profesional:", error);
+    res
+      .status(500)
+      .json({ ok: false, mensaje: "Error al crear profesional", error: error.message });
   }
 };
 
@@ -91,7 +97,7 @@ exports.cambiarEstadoProfesional = async (req, res) => {
     const { id } = req.params;
     const { estado } = req.body;
 
-    const estadosPermitidos = ['activo', 'inactivo'];
+    const estadosPermitidos = ["activo", "inactivo"];
     if (!estadosPermitidos.includes(estado)) {
       return res.status(400).json({
         ok: false,
@@ -100,38 +106,42 @@ exports.cambiarEstadoProfesional = async (req, res) => {
     }
 
     const [result] = await db.query(
-      'UPDATE profesionales SET estado = ? WHERE id = ?',
+      "UPDATE profesionales SET estado = ? WHERE id = ?",
       [estado, id]
     );
 
     if (result.affectedRows === 0) {
       return res.status(404).json({
         ok: false,
-        mensaje: 'Profesional no encontrado',
+        mensaje: "Profesional no encontrado",
       });
     }
 
     // Devolvemos el profesional actualizado (opcional)
     const [rows] = await db.query(
-      'SELECT * FROM profesionales WHERE id = ?',
+      "SELECT * FROM profesionales WHERE id = ?",
       [id]
     );
 
     res.json({
       ok: true,
-      mensaje: 'Estado del profesional actualizado correctamente',
+      mensaje: "Estado del profesional actualizado correctamente",
       profesional: rows[0],
     });
   } catch (error) {
-    console.error('Error al cambiar estado del profesional:', error);
+    console.error("Error al cambiar estado del profesional:", error);
     res.status(500).json({
       ok: false,
-      mensaje: 'Error al cambiar el estado del profesional',
+      mensaje: "Error al cambiar el estado del profesional",
       error: error.message,
     });
   }
 };
 
+// ===============================
+// Actualizar profesional
+// PUT /api/profesionales/:id
+// ===============================
 exports.actualizarProfesional = async (req, res) => {
   try {
     const { id } = req.params;
@@ -141,16 +151,25 @@ exports.actualizarProfesional = async (req, res) => {
       `UPDATE profesionales 
        SET nombre_apellido = ?, especialidad = ?, telefono = ?, estado = ?
        WHERE id = ?`,
-      [nombre_apellido, especialidad, telefono, estado, id]
+      [nombre_apellido, especialidad || null, telefono || null, estado, id]
     );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: "Profesional no encontrado",
+      });
+    }
 
     res.json({
       ok: true,
-      mensaje: 'Profesional actualizado correctamente',
+      mensaje: "Profesional actualizado correctamente",
     });
   } catch (error) {
-    console.error('Error al actualizar profesional:', error);
-    res.status(500).json({ ok: false, mensaje: 'Error al actualizar profesional' });
+    console.error("Error al actualizar profesional:", error);
+    res
+      .status(500)
+      .json({ ok: false, mensaje: "Error al actualizar profesional", error: error.message });
   }
 };
 

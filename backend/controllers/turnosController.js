@@ -221,3 +221,108 @@ exports.obtenerTurnosPorFecha = async (req, res) => {
   }
 };
 
+// ===============================
+// Actualizar turno
+// PUT /api/turnos/:id
+// Body: { id_servicio?, id_profesional?, fecha?, hora?, estado? }
+// ===============================
+exports.actualizarTurno = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { id_servicio, id_profesional, fecha, hora, estado } = req.body;
+
+    // 1) Buscamos el turno actual
+    const [turnos] = await db.query(
+      'SELECT * FROM turnos WHERE id = ?',
+      [id]
+    );
+
+    if (turnos.length === 0) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'Turno no encontrado',
+      });
+    }
+
+    const turnoActual = turnos[0];
+
+    // 2) Construimos nuevos valores (si no vienen, usamos los actuales)
+    const nuevoIdServicio = id_servicio ?? turnoActual.id_servicio;
+    const nuevoIdProfesional = id_profesional ?? turnoActual.id_profesional;
+    const nuevaFecha = fecha ?? turnoActual.fecha;
+    const nuevaHora = hora ?? turnoActual.hora;
+    const nuevoEstado = estado ?? turnoActual.estado;
+
+    // 3) Validamos que el profesional no tenga turno ocupado en ese nuevo horario
+    const [ocupados] = await db.query(
+      `SELECT id 
+       FROM turnos
+       WHERE id_profesional = ?
+         AND fecha = ?
+         AND hora = ?
+         AND estado IN ('pendiente', 'confirmado')
+         AND id <> ?`,
+      [nuevoIdProfesional, nuevaFecha, nuevaHora, id]
+    );
+
+    if (ocupados.length > 0) {
+      return res.status(409).json({
+        ok: false,
+        mensaje: 'Ese horario ya está ocupado para este profesional',
+      });
+    }
+
+    // 4) Actualizamos
+    const [result] = await db.query(
+      `UPDATE turnos
+       SET id_servicio = ?, id_profesional = ?, fecha = ?, hora = ?, estado = ?
+       WHERE id = ?`,
+      [
+        nuevoIdServicio,
+        nuevoIdProfesional,
+        nuevaFecha,
+        nuevaHora,
+        nuevoEstado,
+        id,
+      ]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'No se pudo actualizar el turno',
+      });
+    }
+
+    // 5) Devolvemos el turno actualizado
+    const [rowsActualizado] = await db.query(
+      `SELECT 
+        t.id,
+        u.nombre_apellido AS usuario,
+        p.nombre_apellido AS profesional,
+        s.nombre AS servicio,
+        t.fecha,
+        t.hora,
+        t.estado
+      FROM turnos t
+      JOIN usuarios u ON t.id_usuario = u.id
+      JOIN profesionales p ON t.id_profesional = p.id
+      JOIN servicios s ON t.id_servicio = s.id
+      WHERE t.id = ?`,
+      [id]
+    );
+
+    return res.json({
+      ok: true,
+      mensaje: 'Turno actualizado correctamente',
+      turno: rowsActualizado[0],
+    });
+  } catch (error) {
+    console.error('Error al actualizar turno:', error);
+    return res.status(500).json({
+      ok: false,
+      mensaje: 'Error al actualizar el turno',
+      error: error.message,
+    });
+  }
+};
