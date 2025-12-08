@@ -20,13 +20,13 @@ export interface ServicioUpdateEstadoResponse {
 }
 
 
-interface ServiciosResponse {
+export interface ServiciosResponse {
   ok: boolean;
   servicios: Servicio[];
   mensaje?:string;
 }
 
-interface ServicioDetalleResponse {
+export interface ServicioDetalleResponse {
   ok: boolean;
   servicio: Servicio;
   mensaje?:string;

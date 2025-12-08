@@ -16,19 +16,19 @@ export interface Turno {
   estado: 'pendiente' | 'confirmado' | 'cancelado';
 }
 
-interface CrearTurnoResponse {
+export interface CrearTurnoResponse {
   ok: boolean;
   mensaje: string;
   turno?: Turno;
 }
 
-interface TurnosResponse {
+export interface TurnosResponse {
   ok: boolean;
   turnos: Turno[];
   mensaje?: string;
 }
 
-interface CancelarTurnoResponse {
+export interface CancelarTurnoResponse {
   ok: boolean;
   mensaje: string;
 }
@@ -39,13 +39,13 @@ export interface TurnosPorFechaResponse {
   mensaje?: string;
 }
 
-interface ActualizarTurnoResponse {
+export interface ActualizarTurnoResponse {
   ok: boolean;
   mensaje: string;
   turno?: Turno;
 }
 
-interface ActualizarTurnoPayload {
+export interface ActualizarTurnoPayload {
   id_servicio?: number;
   id_profesional?: number;
   fecha?: string; // YYYY-MM-DD

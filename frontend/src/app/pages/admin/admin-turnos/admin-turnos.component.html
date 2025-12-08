@@ -38,21 +38,20 @@
             </span>
           </td>
 
-          <td class="col-acciones">
+          <td class="acciones">
             <button
               type="button"
-              class="btn-editar"
-              (click)="editarTurno(t)"
-              [disabled]="accionandoId === t.id"
+              class="btn-sm btn-editar"
+              [routerLink]="['/admin/turnos/editar', t.id]"
             >
-              {{ accionandoId === t.id ? 'Editando...' : 'Editar' }}
+              Editar
             </button>
 
             <button
               type="button"
-              class="btn-cancelar"
+              class="btn-sm btn-cancelar"
               (click)="cancelarTurno(t)"
-              [disabled]="cancelandoId === t.id || t.estado === 'cancelado'"
+              [disabled]="cancelandoId === t.id"
             >
               {{ cancelandoId === t.id ? 'Cancelando...' : 'Cancelar' }}
             </button>
