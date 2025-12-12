@@ -3,12 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
-// Interfaz opcional para tipar la respuesta de login/register
 interface AuthResponse {
   ok: boolean;
   mensaje: string;
   token?: string;
-  usuario?: any;
+  usuario?: {
+    id: number;
+    nombre_apellido: string;
+    email: string;
+    rol: string;            // ← importante para el admin.guard
+  };
 }
 
 @Injectable({
@@ -21,7 +25,6 @@ export class AuthService {
 
   // ====================================
   //  REGISTRO
-  //  POST /api/auth/register
   // ====================================
   register(data: {
     nombre_apellido: string;
@@ -34,7 +37,6 @@ export class AuthService {
 
   // ====================================
   //  LOGIN
-  //  POST /api/auth/login
   // ====================================
   login(data: { email: string; password: string }): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, data);
@@ -42,7 +44,6 @@ export class AuthService {
 
   // ====================================
   //  ME — Obtener usuario logueado
-  //  GET /api/auth/me
   // ====================================
   me(): Observable<AuthResponse> {
     return this.http.get<AuthResponse>(`${this.apiUrl}/auth/me`);
@@ -56,37 +57,47 @@ export class AuthService {
   }
 
   guardarToken(token: string): void {
-    if (this.isBrowser()) {
-      localStorage.setItem('token', token);
-    }
+    if (this.isBrowser()) localStorage.setItem('token', token);
   }
 
   obtenerToken(): string | null {
-    if (this.isBrowser()) {
-      return localStorage.getItem('token');
-    }
-    return null;
+    return this.isBrowser() ? localStorage.getItem('token') : null;
   }
 
-  borrarToken(): void {
+  guardarUsuario(usuario: any): void {
     if (this.isBrowser()) {
-      localStorage.removeItem('token');
+      localStorage.setItem('usuario', JSON.stringify(usuario));
     }
   }
 
-  // ====================================
-  //  LOGOUT
-  // ====================================
+  obtenerUsuario(): any | null {
+    if (!this.isBrowser()) return null;
+
+    const data = localStorage.getItem('usuario');
+    return data ? JSON.parse(data) : null;
+  }
+
+  getRol(): string | null {
+    const usuario = this.obtenerUsuario();
+    return usuario?.rol ?? null;
+  }
+
+  isAdmin(): boolean {
+    return this.getRol() === 'ADMIN';
+  }
+
+  borrarTodo(): void {
+    if (!this.isBrowser()) return;
+
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
+  }
+
   logout(): void {
-    this.borrarToken();
+    this.borrarTodo();
   }
 
-  // ====================================
-  //  ESTADO
-  // ====================================
   estaLogueado(): boolean {
     return !!this.obtenerToken();
   }
-
-  
 }

@@ -3,14 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
+export type EstadoConsulta = 'pendiente' | 'respondida' | 'archivada';
+
 export interface Consulta {
   id: number;
   nombre: string;
   email: string;
   telefono?: string | null;
   mensaje: string;
-  estado: 'pendiente' | 'respondida';
-  creado_en?: string;
+  estado: EstadoConsulta;
+  creado_en?: string; // o fecha_envio según cómo lo devuelva el backend
 }
 
 export interface CrearConsultaResponse {
@@ -25,6 +27,12 @@ export interface ConsultasResponse {
   mensaje?: string;
 }
 
+export interface CambiarEstadoConsultaResponse {
+  ok: boolean;
+  mensaje: string;
+  consulta?: Consulta;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -35,7 +43,7 @@ export class ConsultasService {
 
   // ===========================
   // PÚBLICO: enviar consulta
-  // (si ya lo tenías, adaptá el tipo para que coincida)
+  // POST /api/consultas
   // ===========================
   enviarConsulta(data: {
     nombre: string;
@@ -60,13 +68,13 @@ export class ConsultasService {
   // ===========================
   // ADMIN: cambiar estado
   // PUT /api/consultas/:id/estado
-  // body: { estado: 'pendiente' | 'respondida' }
+  // body: { estado: 'pendiente' | 'respondida' | 'archivada' }
   // ===========================
   cambiarEstadoConsulta(
     id: number,
-    estado: 'pendiente' | 'respondida'
-  ): Observable<CrearConsultaResponse> {
-    return this.http.put<CrearConsultaResponse>(
+    estado: EstadoConsulta
+  ): Observable<CambiarEstadoConsultaResponse> {
+    return this.http.put<CambiarEstadoConsultaResponse>(
       `${this.apiUrl}/consultas/${id}/estado`,
       { estado }
     );

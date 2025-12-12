@@ -18,66 +18,66 @@ import { AdminProfesionalFormComponent } from './pages/admin/admin-profesionales
 import { AdminTurnosComponent } from './pages/admin/admin-turnos/admin-turnos.component';
 import { AdminTurnosFormComponent } from './pages/admin/admin-turnos/admin-turnos-form/admin-turnos-form.component';
 import { AdminConsultasComponent } from './pages/admin/admin-consultas/admin-consultas.component';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
-
   // ============================
   //        RUTAS PÚBLICAS
   // ============================
   { path: 'inicio', component: InicioComponent },
   { path: 'servicios', component: ServiciosComponent },
-  { path: 'servicios/:id', component: ServicioDetalleComponent},
+  { path: 'servicios/:id', component: ServicioDetalleComponent },
   { path: 'contacto', component: ContactoComponent },
 
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 
   // ============================
-  //     RUTAS PROTEGIDAS
+  //     RUTAS PROTEGIDAS (CLIENTE)
   // ============================
-  { 
+  {
     path: 'turnos',
     component: TurnosComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'mi-cuenta',
     component: MiCuentaComponent,
     canActivate: [authGuard],
   },
+
+  // ============================
+  //       RUTAS ADMIN (PROTEGIDAS)
+  // ============================
   {
-    path: 'admin', 
-    component:PanelAdminComponent, 
-    canActivate: [authGuard],
+    path: 'admin',
+    canActivate: [adminGuard],
+    children: [
+      // Dashboard principal
+      { path: '', component: PanelAdminComponent },
+
+      // Servicios
+      { path: 'servicios', component: AdminServiciosComponent },
+
+      // Profesionales
+      { path: 'profesionales', component: AdminProfesionalesComponent },
+      { path: 'profesionales/nuevo', component: AdminProfesionalFormComponent },
+      {
+        path: 'profesionales/editar/:id',
+        component: AdminProfesionalFormComponent,
+      },
+
+      // Turnos
+      { path: 'turnos', component: AdminTurnosComponent },
+      {
+        path: 'turnos/editar/:id',
+        component: AdminTurnosFormComponent,
+      },
+
+      // Consultas
+      { path: 'consultas', component: AdminConsultasComponent },
+    ],
   },
-  {
-    path:'admin/servicios',
-    component:AdminServiciosComponent,
-    canActivate: [authGuard]
-  },
-  {
-    path:'admin/profesionales',
-    component:AdminProfesionalesComponent,
-    canActivate: [authGuard]
-  },
-  {
-    path:'admin/profesionales/nuevo',
-    component:AdminProfesionalFormComponent,
-  },
-  {
-    path:'admin/profesionales/editar/:id',
-    component:AdminProfesionalFormComponent,
-  },
-  {
-    path: 'admin/turnos',
-    component: AdminTurnosComponent,
-  },
-  {
-    path: 'admin/turnos/editar/:id',
-    component: AdminTurnosFormComponent,
-  },
-  { path: 'admin/consultas', 
-    component: AdminConsultasComponent },
 
   // ============================
   //  REDIRECCIONES / 404

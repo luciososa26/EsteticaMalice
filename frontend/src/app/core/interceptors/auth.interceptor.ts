@@ -40,7 +40,7 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           // Si el token es inválido/expiró, lo borramos
-          this.authService.borrarToken();
+          this.authService.logout();
           // Opcional: redirigir al login
           // this.router.navigate(['/login']);
         }

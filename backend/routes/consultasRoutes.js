@@ -7,15 +7,23 @@ const {
   cambiarEstadoConsulta,
 } = require('../controllers/consultasController');
 
-// En el futuro, GET lo podés proteger con verifyToken + rol ADMIN
+// Middlewares
+const verifyToken = require('../middleware/verifyToken');
+const verifyAdmin = require('../middleware/verifyAdmin');
 
-// Enviar consulta (público)
+// ==============================
+//  PUBLICO: Enviar consulta
+// ==============================
 router.post('/', crearConsulta);
 
-// Listar consultas (admin)
-router.get('/', obtenerConsultas);
+// ==============================
+//  ADMIN: Listar todas las consultas
+// ==============================
+router.get('/', verifyToken, verifyAdmin, obtenerConsultas);
 
-// Cambiar estado de consultas (admin)
-router.put('/:id/estado', cambiarEstadoConsulta);
+// ==============================
+//  ADMIN: Cambiar estado consulta
+// ==============================
+router.put('/:id/estado', verifyToken, verifyAdmin, cambiarEstadoConsulta);
 
 module.exports = router;

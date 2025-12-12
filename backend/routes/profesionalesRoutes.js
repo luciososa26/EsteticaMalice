@@ -10,12 +10,33 @@ const {
   cambiarEstadoProfesional,
 } = require('../controllers/profesionalesController');
 
-router.get('/', obtenerProfesionales);          
-router.get('/activos', obtenerProfesionalesActivos); 
-router.get('/:id', obtenerProfesionalPorId);
-router.post('/', crearProfesional);
-router.put('/:id', actualizarProfesional);
-router.put('/:id/estado', cambiarEstadoProfesional);
+const verifyToken = require('../middleware/verifyToken');
+const verifyAdmin = require('../middleware/verifyAdmin');
 
+// ===============================
+//  RUTAS PÚBLICAS (CLIENTE)
+// ===============================
+
+// Lista que usa el frontend para turnos, etc.
+// Podés dejar SOLO esta si querés, pero como ya la tenés,
+// no rompemos nada:
+router.get('/', obtenerProfesionales);               // devuelve activos
+router.get('/activos', obtenerProfesionalesActivos); // alias si lo usás
+
+// ===============================
+//  RUTAS SOLO ADMIN
+// ===============================
+
+// Detalle de un profesional (usado por el formulario de edición)
+router.get('/:id', verifyToken, verifyAdmin, obtenerProfesionalPorId);
+
+// Crear profesional
+router.post('/', verifyToken, verifyAdmin, crearProfesional);
+
+// Editar profesional
+router.put('/:id', verifyToken, verifyAdmin, actualizarProfesional);
+
+// Cambiar estado (activo/inactivo)
+router.put('/:id/estado', verifyToken, verifyAdmin, cambiarEstadoProfesional);
 
 module.exports = router;

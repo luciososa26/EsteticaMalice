@@ -1,8 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  Validators,
+  FormGroup,
+} from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,8 +17,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  
-  // Declaramos el form, pero NO lo inicializamos aquí
   loginForm!: FormGroup;
 
   cargando = false;
@@ -22,13 +25,20 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
-    // 👇 AHORA sí: creamos el formulario dentro del constructor
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
     });
+  }
+
+  private redirigirPostLogin(): void {
+    // Si el guard mandó ?redirectTo=/admin/..., respetamos eso
+    const redirectTo =
+      this.route.snapshot.queryParamMap.get('redirectTo') || '/inicio';
+    this.router.navigate([redirectTo]);
   }
 
   onSubmit() {
@@ -45,10 +55,31 @@ export class LoginComponent {
     this.authService
       .login({ email: email || '', password: password || '' })
       .subscribe({
-        next: (resp) => {
+        next: (resp: any) => {
           if (resp.ok && resp.token) {
+            // 1) Guardamos token
             this.authService.guardarToken(resp.token);
-            this.router.navigate(['/inicio']);
+
+            // 2) Si el backend ya manda el usuario con rol, lo guardamos
+            if (resp.usuario) {
+              this.authService.guardarUsuario(resp.usuario);
+              this.redirigirPostLogin();
+              return;
+            }
+
+            // 3) Si no vino usuario en el login, pedimos /auth/me
+            this.authService.me().subscribe({
+              next: (meResp: any) => {
+                if (meResp.ok && meResp.usuario) {
+                  this.authService.guardarUsuario(meResp.usuario);
+                }
+                this.redirigirPostLogin();
+              },
+              error: () => {
+                // Si falla /me, igual lo mando al inicio
+                this.redirigirPostLogin();
+              },
+            });
           } else {
             this.errorMsg = resp.mensaje || 'Error desconocido';
           }
